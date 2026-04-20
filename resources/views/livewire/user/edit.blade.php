@@ -3,13 +3,13 @@
     <nav class="mb-3" style="--bs-breadcrumb-divider: '›';">
         <ol class="breadcrumb" style="font-size: 0.75rem; font-weight: 500;">
             <li class="breadcrumb-item"><a href="/users" wire:navigate class="text-decoration-none text-muted">User Directory</a></li>
-            <li class="breadcrumb-item active text-secondary" aria-current="page">Create New User</li>
+            <li class="breadcrumb-item active text-secondary" aria-current="page">Edit User</li>
         </ol>
     </nav>
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-            <h4 class="mb-0 fw-bold" style="color: #0f172a;">Register System User</h4>
+            <h4 class="mb-0 fw-bold" style="color: #0f172a;">Edit System User</h4>
             <p class="text-muted mb-0" style="font-size: 0.8125rem;">Fill in all fields defined in the system schema</p>
         </div>
         <a href="/users" wire:navigate class="btn btn-sm btn-outline-secondary px-3" style="font-weight: 600; border-radius: 6px;">
@@ -19,7 +19,7 @@
 
     <div class="card border-0 shadow-sm" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 10px;">
         <div class="card-body p-4">
-            <form wire:submit.prevent="store">
+            <form wire:submit.prevent="update">
                 <div class="row g-4">
                     <!-- Column 1: Basic Info -->
                     <div class="col-md-6">
@@ -106,9 +106,8 @@
                 <hr class="my-4" style="border-color: #e2e8f0;">
 
                 <div class="d-flex justify-content-end gap-2">
-                    <button type="reset" class="btn btn-link text-decoration-none text-muted" style="font-size: 0.8125rem; font-weight: 600;">Reset Form</button>
                     <button type="submit" class="btn btn-primary px-5" style="font-size: 0.875rem; font-weight: 600; border-radius: 6px; background: #3b82f6;">
-                        Save User
+                        Update User
                     </button>
                 </div>
             </form>

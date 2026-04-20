@@ -1,15 +1,13 @@
 <?php
 
-namespace App\Livewire\Task;
+namespace App\Livewire\MyTasks;
 
 use Livewire\Component;
-
-use App\Models\Task;
 
 class Index extends Component
 {
     public function render()
     {
-        return view('livewire.task.index');
+        return view('livewire.my-tasks.index');
     }
 }

@@ -4,8 +4,20 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 
+use App\Models\User;
+
 class Create extends Component
 {
+    public $name;
+    public $email;
+    public $phone;
+    public $address;
+    public $role;
+    public $type = 0;
+    public $password;
+    public $avatar;
+    public $is_active = true;
+
     public function render()
     {
         return view('livewire.user.create');
@@ -14,20 +26,21 @@ class Create extends Component
     public function store()
     {
         $validated = $this->validate([
-            'name' => 'required',
-            'email' => 'required|email',
+            'name' => 'required|min:3',
+            'email' => 'required|email|unique:users,email',
             'phone' => 'required',
             'address' => 'required',
             'role' => 'required',
-            'password' => 'required',
-            'avatar' => 'required',
-            'is_active' => 'required',
+            'type' => 'required|integer',
+            'password' => 'required|min:6',
+            'avatar' => 'nullable|url',
+            'is_active' => 'boolean',
         ]);
 
-        $user = User::create($validated);
+        User::create($validated);
 
         session()->flash('success', 'User created successfully');
 
-        return redirect()->route('users');
+        return $this->redirect('/users', navigate: true);
     }
 }

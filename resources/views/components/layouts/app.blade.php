@@ -28,8 +28,8 @@
             height: 100%;
             margin: 0;
             font-family: 'Inter', sans-serif;
-            background: #f1f5f9;
-            color: #1e293b;
+            background: #f8fafc;
+            color: #0f172a;
         }
         #app-wrapper {
             display: flex;
@@ -46,7 +46,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 1.25rem;
-            background: #f1f5f9;
+            background: #f8fafc;
         }
     </style>
 </head>
