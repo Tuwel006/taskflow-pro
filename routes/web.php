@@ -7,6 +7,7 @@ use App\Livewire\User\Create as UserCreate;
 use App\Livewire\User\Edit as UserEdit;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Task\Create as TaskCreate;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     if(Auth::check()){
@@ -21,6 +22,9 @@ Route::middleware(['auth'])->group(function () {
     })->name('dashboard');
     Route::get('/tasks', TaskIndex::class)->name('tasks');
     Route::get('/users', UserIndex::class)->name('users');
+    // Route::get('/users', function(Request $request){
+    //     dd($request->userAgent());
+    // })->name('users');
     Route::get('/users/create', UserCreate::class)->name('users.create');
     Route::get('/users/{id}/edit', UserEdit::class)->name('users.edit');
     Route::post('/logout', function () {

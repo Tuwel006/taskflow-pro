@@ -1,16 +1,20 @@
 <div>
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="mb-0 fw-bold" style="color: #0f172a;">Create New Task</h4>
-            <p class="text-muted mb-0" style="font-size: 0.8125rem;">Assign and track new action items</p>
-        </div>
-        <a href="/tasks" wire:navigate class="btn btn-outline-secondary px-3" style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px;">
-            <i class="bi bi-arrow-left me-1"></i> Back
-        </a>
-    </div>
+    @if(!$inModal)
+    <x-page-header 
+        title="Create New Task" 
+        subtitle="Assign and track new action items"
+        :breadcrumbItems="[['label' => 'Tasks', 'url' => '/tasks'], ['label' => 'Create']]"
+    >
+        <x-slot name="actions">
+            <a href="/tasks" wire:navigate class="btn btn-outline-secondary px-3 shadow-sm d-flex align-items-center" style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px;">
+                <i class="bi bi-arrow-left me-2"></i> Back
+            </a>
+        </x-slot>
+    </x-page-header>
+    @endif
 
-    <div class="card border-0 shadow-sm" style="border-radius: 12px; border: 1px solid #e2e8f0 !important; background: #ffffff;">
-        <div class="card-body p-4 p-md-5">
+    <div class="{{ $inModal ? '' : 'card border-0 shadow-sm' }}" style="{{ $inModal ? '' : 'border-radius: 12px; border: 1px solid #e2e8f0 !important; background: #ffffff;' }}">
+        <div class="{{ $inModal ? 'p-0' : 'card-body p-4 p-md-5' }}">
             <form wire:submit.prevent="store">
                 
                 <!-- Task Title -->
@@ -59,7 +63,7 @@
                 </div>
 
                 <!-- Submit Button -->
-                <button type="submit" class="btn btn-primary w-100 py-2 fw-bold position-relative shadow-sm" 
+                <button type="submit" class="btn btn-primary w-100 py-3 fw-bold position-relative shadow-sm" 
                         style="border-radius: 8px; background: #0f172a; border: none; font-size: 0.875rem;">
                     <span wire:loading.remove wire:target="store">Create Task</span>
                     <span wire:loading wire:target="store">
@@ -78,3 +82,4 @@
         </div>
     </div>
 </div>
+

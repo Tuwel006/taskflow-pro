@@ -1,13 +1,16 @@
 <div class="container-fluid py-2">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="mb-0 fw-bold" style="color: #0f172a;">User Directory</h4>
-            <p class="text-muted mb-0" style="font-size: 0.8125rem;">Manage team members, roles, and access credentials</p>
-        </div>
-        <a href="/users/create" wire:navigate class="btn btn-primary px-3" style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px;">
-            <i class="bi bi-person-plus me-1"></i> Add User
-        </a>
-    </div>
+    <x-page-header 
+        title="User Management" 
+        subtitle="Maintain and audit your organization's human capital"
+        :breadcrumbItems="[['label' => 'Team', 'url' => '/users'], ['label' => 'Directory']]"
+    >
+        <x-slot name="actions">
+            <a href="/users/create" wire:navigate class="btn btn-primary px-3 shadow-sm d-flex align-items-center" 
+               style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px; background: #0f172a; border: none;">
+                <i class="bi bi-person-plus me-2"></i> Add User
+            </a>
+        </x-slot>
+    </x-page-header>
 
     @if (session()->has('message'))
         <div class="alert alert-success border-0 shadow-sm d-flex align-items-center" role="alert" style="background: #ecfdf5; color: #065f46; border-radius: 8px; font-size: 0.8125rem;">

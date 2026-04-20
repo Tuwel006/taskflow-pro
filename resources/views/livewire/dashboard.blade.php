@@ -1,5 +1,10 @@
 <x-layouts.app title="Dashboard">
 <div class="container-fluid py-2">
+    <x-page-header 
+        title="Command Dashboard" 
+        subtitle="Centralized intelligence and overview of all operations"
+        :breadcrumbItems="[['label' => 'Analytics', 'url' => '#'], ['label' => 'Current Status']]"
+    />
     <!-- Header Summary -->
     <div class="row g-3 mb-4">
         <div class="col-6 col-md-3">

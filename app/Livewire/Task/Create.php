@@ -15,6 +15,7 @@ class Create extends Component
     public $due_date;
     public $assigned_to;
     public $users;
+    public $inModal = false;
 
     public function mount()
     {

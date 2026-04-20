@@ -1,13 +1,19 @@
 <div class="container-fluid py-2">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="mb-0 fw-bold" style="color: #0f172a;">Task Registry</h4>
-            <p class="text-muted mb-0" style="font-size: 0.8125rem;">Manage and track organization-wide action items</p>
-        </div>
-        <a href="/tasks/create" wire:navigate class="btn btn-primary px-3" style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px;">
-            <i class="bi bi-plus-lg me-1"></i> New Task
-        </a>
-    </div>
+    <x-page-header 
+        title="Task Registry" 
+        subtitle="Manage and track organization-wide action items"
+        :breadcrumbItems="[['label' => 'Tasks', 'url' => '/tasks'], ['label' => 'Registry']]"
+    >
+        <x-slot name="actions">
+            <button 
+                class="btn btn-primary px-3 shadow-sm d-flex align-items-center" 
+                style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px; background: #0f172a; border: none;"
+                @click="$dispatch('open-modal', 'create-task')"
+            >
+                <i class="bi bi-plus-lg me-2"></i> New Task
+            </button>
+        </x-slot>
+    </x-page-header>
 
     <!-- Filters Row -->
     <div class="card border-0 mb-4" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 8px;">
@@ -39,9 +45,18 @@
         </div>
     </div>
 
-    <livewire:partials.task-list :tasks="$tasks->items()" scope="all" />
+    @include('components.task-list', [
+    'tasks' => $tasks,
+    'scope' => 'all'
+])
 
     <div class="mt-4">
         {{ $tasks->links() }}
     </div>
+
+    <x-modal name="create-task" title="Create New Task" maxWidth="900px">
+
+    <livewire:task.create :inModal="true" />
+
+</x-modal>
 </div>

@@ -1,21 +1,15 @@
 <div class="container-fluid py-2">
-    <!-- Breadcrumb -->
-    <nav class="mb-3" style="--bs-breadcrumb-divider: '›';">
-        <ol class="breadcrumb" style="font-size: 0.75rem; font-weight: 500;">
-            <li class="breadcrumb-item"><a href="/users" wire:navigate class="text-decoration-none text-muted">User Directory</a></li>
-            <li class="breadcrumb-item active text-secondary" aria-current="page">Create New User</li>
-        </ol>
-    </nav>
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="mb-0 fw-bold" style="color: #0f172a;">Register System User</h4>
-            <p class="text-muted mb-0" style="font-size: 0.8125rem;">Fill in all fields defined in the system schema</p>
-        </div>
-        <a href="/users" wire:navigate class="btn btn-sm btn-outline-secondary px-3" style="font-weight: 600; border-radius: 6px;">
-            <i class="bi bi-arrow-left me-1"></i> Back to List
-        </a>
-    </div>
+    <x-page-header 
+        title="Register System User" 
+        subtitle="Fill in all fields defined in the system schema"
+        :breadcrumbItems="[['label' => 'Team', 'url' => '/users'], ['label' => 'Create']]"
+    >
+        <x-slot name="actions">
+            <a href="/users" wire:navigate class="btn btn-sm btn-outline-secondary px-3 shadow-sm d-flex align-items-center" style="font-weight: 600; border-radius: 6px;">
+                <i class="bi bi-arrow-left me-2"></i> Back to List
+            </a>
+        </x-slot>
+    </x-page-header>
 
     <div class="card border-0 shadow-sm" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 10px;">
         <div class="card-body p-4">
