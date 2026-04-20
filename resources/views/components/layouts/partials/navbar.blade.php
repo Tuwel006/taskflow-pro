@@ -133,9 +133,7 @@
     </div>
 
     <div class="nav-actions">
-        <a href="#" class="nav-btn-icon" title="Notifications">
-            <i class="bi bi-bell"></i>
-        </a>
+        <livewire:partials.notification-dropdown />
         
         <livewire:partials.user-dropdown />
     </div>

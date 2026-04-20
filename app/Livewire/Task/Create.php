@@ -38,7 +38,7 @@ class Create extends Component
             'assigned_to' => 'required|exists:users,id',
         ]);
 
-        Task::create([
+        $task = Task::create([
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->status,
@@ -47,6 +47,8 @@ class Create extends Component
             'assigned_to' => $this->assigned_to,
             'created_by' => auth()->id(),
         ]);
+
+        event(new \App\Events\TaskCreated($task));
 
         session()->flash('message', 'Task created successfully');
 
