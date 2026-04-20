@@ -7,19 +7,12 @@ use App\Models\Task;
 
 class TaskList extends Component
 {
-    public $scope = 'all'; // 'all' or 'my'
+    public $tasks;
+    public $scope = 'all'; // Keep scope for UI conditional logic like the dropdown
 
     public function render()
     {
-        $query = Task::with(['assignee', 'creator']);
-
-        if ($this->scope === 'my') {
-            $query->where('assigned_to', auth()->id());
-        }
-
-        $tasks = $query->latest()->get();
-
-        return view('livewire.partials.task-list', compact('tasks'));
+        return view('livewire.partials.task-list');
     }
 
     public function updateStatus($taskId, $newStatus)
