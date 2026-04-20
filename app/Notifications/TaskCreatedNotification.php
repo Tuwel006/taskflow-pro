@@ -27,7 +27,7 @@ class TaskCreatedNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['database'];
+        return ['database', 'mail'];
     }
 
     /**
@@ -36,9 +36,15 @@ class TaskCreatedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+            ->subject('New Task Assigned: ' . $this->task->title)
+            ->view('emails.task-created', [
+                'name' => $notifiable->name,
+                'taskTitle' => $this->task->title,
+                'taskDescription' => $this->task->description,
+                'taskPriority' => $this->task->priority,
+                'taskDueDate' => $this->task->due_date,
+                'url' => url('/tasks'), // Update to specific task URL if available
+            ]);
     }
 
     public function toDatabase(object $notifiable): array
