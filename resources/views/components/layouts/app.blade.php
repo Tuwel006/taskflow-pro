@@ -1,33 +1,79 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
-    <title>{{ $title ?? 'Task Manager' }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>{{ $title ?? 'TaskFlow – Task Management' }}</title>
 
+    {{-- Google Fonts --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    {{-- Bootstrap 5 CSS --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    {{-- Bootstrap Icons --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    {{-- Vite (app.css / app.js) --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @livewireStyles
+
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        #app-wrapper {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+        #content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        #page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.25rem;
+            background: #f1f5f9;
+        }
+    </style>
 </head>
 <body>
 
-<div class="d-flex" style="height: 100vh;">
+<div id="app-wrapper">
 
-    <!-- Sidebar -->
-    @include('layouts.partials.sidebar')
+    {{-- Sidebar --}}
+    @include('components.layouts.partials.sidebar')
 
-    <div class="flex-grow-1 d-flex flex-column">
+    <div id="content-area">
 
-        <!-- Navbar -->
-        @include('layouts.partials.navbar')
+        {{-- Navbar --}}
+        @include('components.layouts.partials.navbar')
 
-        <!-- Content -->
-        <main class="p-4 overflow-auto">
+        {{-- Main Content --}}
+        <main id="page-content">
             {{ $slot }}
         </main>
 
     </div>
 </div>
 
+{{-- Bootstrap 5 JS Bundle (Popper included) --}}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 @livewireScripts
+
 </body>
 </html>
