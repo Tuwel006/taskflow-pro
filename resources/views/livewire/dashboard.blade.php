@@ -50,56 +50,58 @@
     <div class="row g-4">
         <!-- Recent Activities Table -->
         <div class="col-lg-8">
-            <div class="card border-0" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 8px;">
-                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-bold" style="font-size: 0.875rem; color: #1e293b;">Active Work Queue</h6>
-                    <button class="btn btn-sm btn-outline-secondary" style="font-size: 0.75rem;">Export CSV</button>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table align-middle mb-0" style="border-top: 1px solid #f1f5f9;">
-                            <thead style="background: #f8fafc;">
-                                <tr>
-                                    <th class="px-3" style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #64748b;">Task Detail</th>
-                                    <th style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #64748b;">Stakeholder</th>
-                                    <th style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #64748b;">Priority</th>
-                                    <th style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: #64748b;">Due Date</th>
-                                    <th class="text-end px-3"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach([
-                                    ['Infrastructure Upgrade', 'Engineering Dept', 'Urgent', 'Today', 'danger'],
-                                    ['Security Review', 'Compliance', 'High', 'Tomorrow', 'warning'],
-                                    ['API Documentation', 'Development', 'Medium', 'Apr 24', 'info'],
-                                    ['Client Presentation', 'Marketing', 'Low', 'Apr 26', 'secondary']
-                                ] as $task)
-                                <tr>
-                                    <td class="px-3 py-3">
-                                        <div class="fw-semibold" style="font-size: 0.8125rem; color: #334155;">{{ $task[0] }}</div>
-                                        <div style="font-size: 0.7rem; color: #94a3b8;">System-wide update</div>
-                                    </td>
-                                    <td style="font-size: 0.8125rem; color: #475569;">{{ $task[1] }}</td>
-                                    <td>
-                                        <span class="badge" style="font-size: 0.65rem; border: 1px solid transparent; background-color: rgba(0,0,0,0.05); color: #475569;">
-                                            {{ $task[2] }}
-                                        </span>
-                                    </td>
-                                    <td style="font-size: 0.8125rem; color: #64748b;">{{ $task[3] }}</td>
-                                    <td class="text-end px-3">
-                                        <button class="btn btn-sm" style="color: #64748b;"><i class="bi bi-three-dots"></i></button>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+            <x-data-table :items="collect([1,2,3,4])" emptyText="No active tasks in queue.">
+                <x-slot name="header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold" style="font-size: 0.875rem; color: #1e293b;">Active Work Queue</h6>
+                        <button class="btn btn-sm btn-outline-secondary" style="font-size: 0.75rem;">Export CSV</button>
                     </div>
-                </div>
-                <div class="card-footer bg-white py-3 border-0 text-center">
-                    <a href="/tasks" class="text-decoration-none fw-bold" style="font-size: 0.75rem; color: #3b82f6;">View Full Registry <i class="bi bi-arrow-right"></i></a>
-                </div>
-            </div>
+                </x-slot>
+
+                <x-slot name="columns">
+                    <x-table.th>Task Detail</x-table.th>
+                    <x-table.th>Stakeholder</x-table.th>
+                    <x-table.th>Priority</x-table.th>
+                    <x-table.th>Due Date</x-table.th>
+                    <x-table.th align="end"></x-table.th>
+                </x-slot>
+
+                @foreach([
+                    ['Infrastructure Upgrade', 'Engineering Dept', 'Urgent', 'Today', 'danger'],
+                    ['Security Review', 'Compliance', 'High', 'Tomorrow', 'warning'],
+                    ['API Documentation', 'Development', 'Medium', 'Apr 24', 'info'],
+                    ['Client Presentation', 'Marketing', 'Low', 'Apr 26', 'secondary']
+                ] as $task)
+                    <x-table.row>
+                        <x-table.td>
+                            <div class="fw-semibold" style="font-size: 0.8125rem; color: #334155;">{{ $task[0] }}</div>
+                            <div style="font-size: 0.7rem; color: #94a3b8;">System-wide update</div>
+                        </x-table.td>
+                        <x-table.td>
+                            <span style="font-size: 0.8125rem; color: #475569;">{{ $task[1] }}</span>
+                        </x-table.td>
+                        <x-table.td>
+                            <span class="badge" style="font-size: 0.65rem; border: 1px solid transparent; background-color: rgba(0,0,0,0.05); color: #475569;">
+                                {{ $task[2] }}
+                            </span>
+                        </x-table.td>
+                        <x-table.td>
+                            <span style="font-size: 0.8125rem; color: #64748b;">{{ $task[3] }}</span>
+                        </x-table.td>
+                        <x-table.td align="end">
+                            <button class="btn btn-sm" style="color: #64748b;"><i class="bi bi-three-dots"></i></button>
+                        </x-table.td>
+                    </x-table.row>
+                @endforeach
+
+                <x-slot name="footer">
+                    <div class="text-center">
+                        <a href="/tasks" class="text-decoration-none fw-bold" style="font-size: 0.75rem; color: #3b82f6;">View Full Registry <i class="bi bi-arrow-right"></i></a>
+                    </div>
+                </x-slot>
+            </x-data-table>
         </div>
+
 
         <!-- Quick Entry / Context Sidebar -->
         <div class="col-lg-4">

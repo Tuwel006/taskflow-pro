@@ -43,12 +43,6 @@
     </div>
 
     <!-- Reusable Task List Component -->
-    @include('components.task-list', [
-    'tasks' => $tasks,
-    'scope' => 'all'
-    ])
+    <x-task-list :tasks="$tasks" scope="my" />
 
-    <div class="mt-4">
-        {{ $tasks->links() }}
-    </div>
 </div>

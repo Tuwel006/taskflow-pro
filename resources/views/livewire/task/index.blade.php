@@ -45,14 +45,8 @@
         </div>
     </div>
 
-    @include('components.task-list', [
-    'tasks' => $tasks,
-    'scope' => 'all'
-])
+    <x-task-list :tasks="$tasks" scope="all" />
 
-    <div class="mt-4">
-        {{ $tasks->links() }}
-    </div>
 
     <x-modal name="create-task" title="Create New Task" maxWidth="900px">
 
