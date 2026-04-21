@@ -13,12 +13,17 @@ class Task extends Model
     protected $fillable = [
         'title',
         'description',
-        'status',
+        'task_status_id',
         'priority',
         'due_date',
         'assigned_to',
         'created_by',
     ];
+
+    public function statusRecord()
+    {
+        return $this->belongsTo(TaskStatus::class, 'task_status_id');
+    }
 
     public function assignee()
     {

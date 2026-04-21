@@ -10,16 +10,19 @@ class Create extends Component
 {
     public $title;
     public $description;
-    public $status = 'Pending'; // Default status
+    public $status_id;
     public $priority = 'Medium';
     public $due_date;
     public $assigned_to;
     public $users;
+    public $statuses;
     public $inModal = false;
 
     public function mount()
     {
         $this->users = User::all();
+        $this->statuses = \App\Models\TaskStatus::orderBy('order_index')->get();
+        $this->status_id = $this->statuses->first()->id ?? null;
     }
 
     public function render()
@@ -29,19 +32,21 @@ class Create extends Component
 
     public function store()
     {
-        $this->validate([
-            'title' => 'required|min:3',
-            'description' => 'nullable',
-            'status' => 'required',
-            'priority' => 'required',
-            'due_date' => 'required|date',
-            'assigned_to' => 'required|exists:users,id',
-        ]);
+        // $this->validate([
+        //     // 'title' => 'required|min:3',
+        //     'description' => 'nullable',
+        //     'status_id' => 'required|exists:task_statuses,id',
+        //     'priority' => 'required',
+        //     'due_date' => 'required|date',
+        //     'assigned_to' => 'required|exists:users,id',
+        // ]);
+
+        $status = \App\Models\TaskStatus::find($this->status_id);
 
         $task = Task::create([
             'title' => $this->title,
             'description' => $this->description,
-            'status' => $this->status,
+            'task_status_id' => $this->status_id,
             'priority' => $this->priority,
             'due_date' => $this->due_date,
             'assigned_to' => $this->assigned_to,

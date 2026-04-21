@@ -17,9 +17,7 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('livewire.dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', App\Livewire\Dashboard::class)->name('dashboard');
     Route::get('/tasks', TaskIndex::class)->name('tasks');
     Route::get('/users', UserIndex::class)->name('users');
     // Route::get('/users', function(Request $request){
@@ -33,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
     })->name('logout');
     Route::get('/tasks/create', TaskCreate::class)->name('tasks.create');
     Route::get('/my-tasks', App\Livewire\MyTasks\Index::class)->name('my-tasks');
+    Route::get('/kanban', App\Livewire\Kanban\Board::class)->name('kanban');
 });
 
 Route::middleware(['guest'])->group(function () {

@@ -148,7 +148,9 @@
             My Tasks
             @php
                 $myTaskCount = \App\Models\Task::where('assigned_to', auth()->id())
-                    ->where('status', '!=', 'Completed')
+                    ->whereHas('statusRecord', function($q) {
+                        $q->where('name', '!=', 'Completed');
+                    })
                     ->count();
             @endphp
             @if($myTaskCount > 0)
@@ -175,7 +177,9 @@
             <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>
             Team Tasks
             @php
-                $teamTaskCount = \App\Models\Task::where('status', '!=', 'Completed')->count();
+                $teamTaskCount = \App\Models\Task::whereHas('statusRecord', function($q) {
+                    $q->where('name', '!=', 'Completed');
+                })->count();
             @endphp
             @if($teamTaskCount > 0)
                 <span class="nav-badge">{{ str_pad($teamTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
@@ -185,9 +189,7 @@
 
     <div class="sidebar-footer">
         <div class="user-compact">
-            <div class="user-avatar-sm">
-                {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-            </div>
+            <x-user-avatar :user="auth()->user()" size="28px" fontsize="0.75rem" />
             <div class="user-info-sm text-truncate">
                 <div class="user-name-sm">{{ auth()->user()->name ?? 'Administrator' }}</div>
                 <div class="user-role-sm">Standard Account</div>

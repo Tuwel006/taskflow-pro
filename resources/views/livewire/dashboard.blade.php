@@ -1,4 +1,3 @@
-<x-layouts.app title="Dashboard">
 <div class="container-fluid py-2">
     <x-page-header 
         title="Command Dashboard" 
@@ -11,9 +10,9 @@
             <div class="card border-0" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 8px;">
                 <div class="card-body p-3">
                     <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.05em;">Total Assignments</div>
-                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">24</div>
+                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">{{ str_pad($totalTasks, 2, '0', STR_PAD_LEFT) }}</div>
                     <div class="text-success fw-semibold mt-1" style="font-size: 0.75rem;">
-                        <i class="bi bi-graph-up-arrow"></i> +12% vs last month
+                        Global count
                     </div>
                 </div>
             </div>
@@ -22,8 +21,8 @@
             <div class="card border-0" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 8px;">
                 <div class="card-body p-3">
                     <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.05em;">In Progress</div>
-                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">08</div>
-                    <div class="text-muted mt-1" style="font-size: 0.75rem;">3 due today</div>
+                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">{{ str_pad($inProgressCount, 2, '0', STR_PAD_LEFT) }}</div>
+                    <div class="text-muted mt-1" style="font-size: 0.75rem;">Active status</div>
                 </div>
             </div>
         </div>
@@ -31,8 +30,8 @@
             <div class="card border-0" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 8px;">
                 <div class="card-body p-3">
                     <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.05em;">Completed</div>
-                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">126</div>
-                    <div class="text-muted mt-1" style="font-size: 0.75rem;">Lifetime total</div>
+                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">{{ str_pad($completedCount, 2, '0', STR_PAD_LEFT) }}</div>
+                    <div class="text-muted mt-1" style="font-size: 0.75rem;">Successfully finished</div>
                 </div>
             </div>
         </div>
@@ -40,8 +39,8 @@
             <div class="card border-0" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 8px;">
                 <div class="card-body p-3">
                     <div class="text-uppercase text-muted fw-bold mb-1" style="font-size: 0.65rem; letter-spacing: 0.05em;">Avg. Efficiency</div>
-                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">94.2%</div>
-                    <div class="text-muted mt-1" style="font-size: 0.75rem;">Based on 30 days</div>
+                    <div class="h4 fw-bold mb-0" style="color: #0f172a;">{{ $totalTasks > 0 ? round(($completedCount/$totalTasks)*100, 1) : 0 }}%</div>
+                    <div class="text-muted mt-1" style="font-size: 0.75rem;">Completion rate</div>
                 </div>
             </div>
         </div>
@@ -50,55 +49,53 @@
     <div class="row g-4">
         <!-- Recent Activities Table -->
         <div class="col-lg-8">
-            <x-data-table :items="collect([1,2,3,4])" emptyText="No active tasks in queue.">
+            <x-data-table :items="$recentTasks" emptyText="No recent activities.">
                 <x-slot name="header">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-bold" style="font-size: 0.875rem; color: #1e293b;">Active Work Queue</h6>
-                        <button class="btn btn-sm btn-outline-secondary" style="font-size: 0.75rem;">Export CSV</button>
+                        <h6 class="mb-0 fw-bold" style="font-size: 0.875rem; color: #1e293b;">Recent Activity Log</h6>
+                        <a href="/tasks" wire:navigate class="btn btn-sm btn-outline-secondary" style="font-size: 0.75rem;">View All</a>
                     </div>
                 </x-slot>
 
                 <x-slot name="columns">
                     <x-table.th>Task Detail</x-table.th>
-                    <x-table.th>Stakeholder</x-table.th>
-                    <x-table.th>Priority</x-table.th>
-                    <x-table.th>Due Date</x-table.th>
-                    <x-table.th align="end"></x-table.th>
+                    <x-table.th>Assignee</x-table.th>
+                    <x-table.th>Status</x-table.th>
+                    <x-table.th align="end">Priority</x-table.th>
                 </x-slot>
 
-                @foreach([
-                    ['Infrastructure Upgrade', 'Engineering Dept', 'Urgent', 'Today', 'danger'],
-                    ['Security Review', 'Compliance', 'High', 'Tomorrow', 'warning'],
-                    ['API Documentation', 'Development', 'Medium', 'Apr 24', 'info'],
-                    ['Client Presentation', 'Marketing', 'Low', 'Apr 26', 'secondary']
-                ] as $task)
+                @foreach($recentTasks as $task)
                     <x-table.row>
                         <x-table.td>
-                            <div class="fw-semibold" style="font-size: 0.8125rem; color: #334155;">{{ $task[0] }}</div>
-                            <div style="font-size: 0.7rem; color: #94a3b8;">System-wide update</div>
+                            <div class="fw-semibold" style="font-size: 0.8125rem; color: #334155;">{{ $task->title }}</div>
+                            <div style="font-size: 0.7rem; color: #94a3b8;">{{ \Carbon\Carbon::parse($task->created_at)->diffForHumans() }}</div>
                         </x-table.td>
                         <x-table.td>
-                            <span style="font-size: 0.8125rem; color: #475569;">{{ $task[1] }}</span>
+                            <div class="d-flex align-items-center gap-2">
+                                <x-user-avatar :user="$task->assignee" size="24px" fontsize="0.65rem" />
+                                <span style="font-size: 0.8125rem; color: #475569;">{{ $task->assignee->name ?? 'System' }}</span>
+                            </div>
                         </x-table.td>
                         <x-table.td>
-                            <span class="badge" style="font-size: 0.65rem; border: 1px solid transparent; background-color: rgba(0,0,0,0.05); color: #475569;">
-                                {{ $task[2] }}
+                            <span class="badge rounded-pill" style="font-size: 0.65rem; background: {{ $task->statusRecord->color ?? '#64748b' }}15; color: {{ $task->statusRecord->color ?? '#64748b' }}; border: 1px solid {{ $task->statusRecord->color ?? '#64748b' }}44 !important;">
+                                {{ $task->statusRecord->name ?? 'N/A' }}
                             </span>
                         </x-table.td>
-                        <x-table.td>
-                            <span style="font-size: 0.8125rem; color: #64748b;">{{ $task[3] }}</span>
-                        </x-table.td>
                         <x-table.td align="end">
-                            <button class="btn btn-sm" style="color: #64748b;"><i class="bi bi-three-dots"></i></button>
+                            @php
+                                $pColor = match($task->priority) {
+                                    'Urgent' => '#ef4444',
+                                    'High' => '#f59e0b',
+                                    'Medium' => '#3b82f6',
+                                    default => '#94a3b8'
+                                };
+                            @endphp
+                            <span style="font-size: 0.75rem; font-weight: 600; color: {{ $pColor }};">
+                                {{ $task->priority }}
+                            </span>
                         </x-table.td>
                     </x-table.row>
                 @endforeach
-
-                <x-slot name="footer">
-                    <div class="text-center">
-                        <a href="/tasks" class="text-decoration-none fw-bold" style="font-size: 0.75rem; color: #3b82f6;">View Full Registry <i class="bi bi-arrow-right"></i></a>
-                    </div>
-                </x-slot>
             </x-data-table>
         </div>
 
@@ -139,4 +136,3 @@
         </div>
     </div>
 </div>
-</x-layouts.app>

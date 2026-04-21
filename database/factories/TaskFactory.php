@@ -18,13 +18,13 @@ class TaskFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->sentence(3),
-            'description' => $this->faker->paragraph(2),
-            'due_date' => $this->faker->dateTimeBetween('now', '+1 year'),
-            'priority' => $this->faker->randomElement(['High', 'Medium', 'Low']),
-            'status' => $this->faker->randomElement(['Pending', 'In Progress', 'Completed']),
-            'created_by' => $this->faker->numberBetween(1, 21),
-            'assigned_to' => $this->faker->numberBetween(1, 21),
+            'title' => $this->faker->sentence(4),
+            'description' => $this->faker->paragraph(1),
+            'due_date' => $this->faker->dateTimeBetween('now', '+30 days'),
+            'priority' => $this->faker->randomElement(['Urgent', 'High', 'Medium', 'Low']),
+            'task_status_id' => \App\Models\TaskStatus::inRandomOrder()->first()?->id ?? 1,
+            'created_by' => \App\Models\User::inRandomOrder()->first()?->id ?? 1,
+            'assigned_to' => \App\Models\User::inRandomOrder()->first()?->id ?? 1,
         ];
     }
 }

@@ -31,9 +31,18 @@
                     @error('description') <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ $message }}</div> @enderror
                 </div>
 
-                <!-- Priority & Due Date Row -->
+                <!-- Status & Due Date Row -->
                 <div class="row">
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-semibold text-muted" style="font-size: 0.75rem;">STATUS</label>
+                        <select wire:model="status_id" class="form-select" style="font-size: 0.875rem; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            @foreach($statuses as $status)
+                                <option value="{{ $status->id }}">{{ $status->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('status_id') <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ $message }}</div> @enderror
+                    </div>
+                    <div class="col-md-4 mb-3">
                         <label class="form-label fw-semibold text-muted" style="font-size: 0.75rem;">PRIORITY</label>
                         <select wire:model="priority" class="form-select" style="font-size: 0.875rem; border-radius: 8px; border: 1px solid #e2e8f0;">
                             <option value="Low">Low</option>
@@ -43,7 +52,7 @@
                         </select>
                         @error('priority') <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ $message }}</div> @enderror
                     </div>
-                    <div class="col-md-6 mb-3">
+                    <div class="col-md-4 mb-3">
                         <label class="form-label fw-semibold text-muted" style="font-size: 0.75rem;">DUE DATE</label>
                         <input type="date" wire:model="due_date" class="form-control" style="font-size: 0.875rem; border-radius: 8px; border: 1px solid #e2e8f0;">
                         @error('due_date') <div class="text-danger mt-1" style="font-size: 0.75rem;">{{ $message }}</div> @enderror
