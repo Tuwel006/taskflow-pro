@@ -6,7 +6,8 @@
         background: #ffffff;
         display: flex;
         flex-direction: column;
-        border-right: 1px solid #e0f2fe; /* Soft cyan border */
+        border-right: 1px solid #e0f2fe;
+        /* Soft cyan border */
         position: relative;
         z-index: 100;
         flex-shrink: 0;
@@ -20,10 +21,12 @@
         align-items: center;
         gap: 0.5rem;
     }
+
     .sidebar-brand .brand-icon {
         width: 32px;
         height: 32px;
-        background: #0ea5e9; /* Sky Blue */
+        background: #0ea5e9;
+        /* Sky Blue */
         border-radius: 6px;
         display: flex;
         align-items: center;
@@ -31,6 +34,7 @@
         font-size: 1rem;
         color: #fff;
     }
+
     .sidebar-brand .brand-text {
         font-size: 0.95rem;
         font-weight: 700;
@@ -62,6 +66,7 @@
         transition: all 0.2s ease;
         text-decoration: none;
     }
+
     .sidebar-nav .nav-link .nav-icon {
         width: 20px;
         height: 20px;
@@ -71,15 +76,18 @@
         font-size: 1.1rem;
         opacity: 0.7;
     }
+
     .sidebar-nav .nav-link:hover {
         color: #0ea5e9;
         background: #f0f9ff;
     }
+
     .sidebar-nav .nav-link.active {
         color: #0369a1;
         background: #e0f2fe;
         font-weight: 600;
     }
+
     .sidebar-nav .nav-link.active .nav-icon {
         color: #0ea5e9;
         opacity: 1;
@@ -103,11 +111,13 @@
         background: #f8fafc;
         border-top: 1px solid #f1f5f9;
     }
+
     .user-compact {
         display: flex;
         align-items: center;
         gap: 0.6rem;
     }
+
     .user-avatar-sm {
         width: 28px;
         height: 28px;
@@ -121,12 +131,25 @@
         font-weight: 700;
         border: 1px solid #bae6fd;
     }
+
     .user-info-sm {
         line-height: 1.2;
         overflow: hidden;
     }
-    .user-name-sm { font-size: 0.75rem; font-weight: 600; color: #1e293b; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
-    .user-role-sm { font-size: 0.65rem; color: #94a3b8; }
+
+    .user-name-sm {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #1e293b;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .user-role-sm {
+        font-size: 0.65rem;
+        color: #94a3b8;
+    }
 </style>
 
 <div id="sidebar">
@@ -148,13 +171,14 @@
             My Tasks
             @php
                 $myTaskCount = \App\Models\Task::where('assigned_to', auth()->id())
-                    ->whereHas('statusRecord', function($q) {
+                    ->whereHas('statusRecord', function ($q) {
                         $q->where('name', '!=', 'Completed');
                     })
                     ->count();
             @endphp
-            @if($myTaskCount > 0)
-                <span class="nav-badge" style="background: rgba(16, 185, 129, 0.2); color: #10b981;">{{ str_pad($myTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
+            @if ($myTaskCount > 0)
+                <span class="nav-badge"
+                    style="background: rgba(16, 185, 129, 0.2); color: #10b981;">{{ str_pad($myTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
             @endif
         </a>
         <a href="#" wire:navigate class="nav-link">
@@ -173,15 +197,19 @@
             <span class="nav-icon"><i class="bi bi-calendar4-event"></i></span>
             Schedule
         </a>
+        <a href="/teams" wire:navigate class="nav-link {{ request()->is('teams*') ? 'active' : '' }}">
+            <span class="nav-icon"><i class="bi bi-chat-left-text"></i></span>
+            Teams
+        </a>
         <a href="/tasks" wire:navigate class="nav-link {{ request()->is('tasks*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>
             Team Tasks
             @php
-                $teamTaskCount = \App\Models\Task::whereHas('statusRecord', function($q) {
+                $teamTaskCount = \App\Models\Task::whereHas('statusRecord', function ($q) {
                     $q->where('name', '!=', 'Completed');
                 })->count();
             @endphp
-            @if($teamTaskCount > 0)
+            @if ($teamTaskCount > 0)
                 <span class="nav-badge">{{ str_pad($teamTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
             @endif
         </a>

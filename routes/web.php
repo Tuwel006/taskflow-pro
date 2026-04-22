@@ -1,39 +1,41 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Livewire\Auth\Login;
+use App\Livewire\Channels\Index as ChannelIndex;
+use App\Livewire\Dashboard;
+use App\Livewire\MyTasks\Index;
+use App\Livewire\Task\Create as TaskCreate;
 use App\Livewire\Task\Index as TaskIndex;
-use App\Livewire\User\Index as UserIndex;
 use App\Livewire\User\Create as UserCreate;
 use App\Livewire\User\Edit as UserEdit;
+use App\Livewire\User\Index as UserIndex;
 use Illuminate\Support\Facades\Auth;
-use App\Livewire\Task\Create as TaskCreate;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    if(Auth::check()){
+    if (Auth::check()) {
         return redirect()->route('dashboard');
     }
+
     return redirect()->route('login');
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', App\Livewire\Dashboard::class)->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/tasks', TaskIndex::class)->name('tasks');
     Route::get('/users', UserIndex::class)->name('users');
-    // Route::get('/users', function(Request $request){
-    //     dd($request->userAgent());
-    // })->name('users');
     Route::get('/users/create', UserCreate::class)->name('users.create');
     Route::get('/users/{id}/edit', UserEdit::class)->name('users.edit');
     Route::post('/logout', function () {
         Auth::logout();
+
         return redirect()->route('login');
     })->name('logout');
     Route::get('/tasks/create', TaskCreate::class)->name('tasks.create');
-    Route::get('/my-tasks', App\Livewire\MyTasks\Index::class)->name('my-tasks');
-    Route::get('/kanban', App\Livewire\Kanban\Board::class)->name('kanban');
+    Route::get('/my-tasks', Index::class)->name('my-tasks');
+    Route::get('/teams', ChannelIndex::class)->name('teams');
 });
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/login', App\Livewire\Auth\Login::class)->name('login');
+    Route::get('/login', Login::class)->name('login');
 });
