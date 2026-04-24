@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,57 +27,70 @@
     @livewireStyles
 
     <style>
-        * { box-sizing: border-box; }
-        html, body {
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
             height: 100%;
             margin: 0;
             font-family: 'Inter', sans-serif;
             background: #f8fafc;
             color: #0f172a;
         }
+
         #app-wrapper {
             display: flex;
             height: 100vh;
             overflow: hidden;
         }
+
         #content-area {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
+
         #page-content {
             flex: 1;
             overflow-y: auto;
             padding: 1.25rem;
             background: #f8fafc;
         }
+
+        [x-cloak] {
+            display: none !important;
+        }
     </style>
 </head>
+
 <body>
 
-<div id="app-wrapper">
+    <div id="app-wrapper">
 
-    {{-- Sidebar --}}
-    @include('components.layouts.partials.sidebar')
+        {{-- Sidebar --}}
+        @include('components.layouts.partials.sidebar')
 
-    <div id="content-area">
+        <div id="content-area">
 
-        {{-- Navbar --}}
-        @include('components.layouts.partials.navbar')
+            {{-- Navbar --}}
+            @include('components.layouts.partials.navbar')
 
-        {{-- Main Content --}}
-        <main id="page-content">
-            {{ $slot }}
-        </main>
+            {{-- Main Content --}}
+            <main id="page-content">
+                {{ $slot }}
+            </main>
 
+        </div>
     </div>
-</div>
 
-{{-- Bootstrap 5 JS Bundle (Popper included) --}}
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- Bootstrap 5 JS Bundle (Popper included) --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-@livewireScripts
+    @livewireScripts
 
 </body>
+
 </html>

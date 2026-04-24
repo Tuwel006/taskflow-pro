@@ -4,7 +4,7 @@
     $name = $user->name ?? 'Unknown User';
     $words = explode(' ', trim($name));
     $initials = '';
-    
+
     if (count($words) >= 2) {
         $initials = strtoupper(substr($words[0], 0, 1) . substr($words[count($words) - 1], 0, 1));
     } else {
@@ -17,22 +17,19 @@
     $bgColor = $colors[$colorIndex];
 @endphp
 
-<div {{ $attributes->merge(['class' => 'd-inline-block position-relative']) }} 
-     style="width: {{ $size }}; height: {{ $size }}; flex-shrink: 0;"
-     x-data="{ imgError: false }">
-    
-    @if($user && $user->avatar)
-        <img src="{{ $user->avatar }}" 
-             alt="{{ $name }}"
-             class="rounded-circle w-100 h-100 object-fit-cover shadow-sm border border-2 border-white"
-             x-show="!imgError"
-             x-on:error="imgError = true"
-             style="display: block;">
+<div {{ $attributes->merge(['class' => 'd-inline-block position-relative overflow-hidden']) }}
+    style="width: {{ $size }}; height: {{ $size }}; flex-shrink: 0; border-radius: 50%;"
+    x-data="{ imgError: false }">
+
+    @if ($user && $user->avatar)
+        <img src="{{ $user->avatar }}" alt="{{ $name }}"
+            class="rounded-circle w-100 h-100 object-fit-cover shadow-sm border border-2 border-white" x-show="!imgError"
+            x-on:error="imgError = true" style="display: block;">
     @endif
 
-    <div x-show="imgError || !{{ $user && $user->avatar ? 'true' : 'false' }}" 
-         class="rounded-circle w-100 h-100 d-flex align-items-center justify-content-center fw-bold shadow-sm border border-2 border-white"
-         style="background: {{ $bgColor }}; color: #fff; font-size: {{ $fontsize }}; letter-spacing: -0.02em;">
+    <div x-show="imgError || !{{ $user && $user->avatar ? 'true' : 'false' }}" x-cloak
+        class="rounded-circle w-100 h-100 d-flex align-items-center justify-content-center fw-bold shadow-sm border border-2 border-white position-absolute top-0 start-0"
+        style="background: {{ $bgColor }}; color: #fff; font-size: {{ $fontsize }}; letter-spacing: -0.02em;">
         {{ $initials }}
     </div>
 </div>
