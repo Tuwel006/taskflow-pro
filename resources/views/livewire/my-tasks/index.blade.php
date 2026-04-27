@@ -13,15 +13,15 @@
         <!-- View Toggle (Tabs) -->
         <div class="nav nav-pills bg-white p-1 rounded shadow-sm border"
             style="background: #fff; border: 1px solid #e2e8f0 !important;">
-            <button wire:click="setViewMode('list')"
-                class="nav-link py-1 px-3 {{ $viewMode === 'list' ? 'active' : '' }}"
-                style="font-size: 0.75rem; font-weight: 600; {{ $viewMode === 'list' ? 'background: #0f172a;' : 'color: #64748b;' }}">
-                <i class="bi bi-list-task me-1"></i> List View
-            </button>
             <button wire:click="setViewMode('kanban')"
                 class="nav-link py-1 px-3 {{ $viewMode === 'kanban' ? 'active' : '' }}"
                 style="font-size: 0.75rem; font-weight: 600; {{ $viewMode === 'kanban' ? 'background: #0f172a;' : 'color: #64748b;' }}">
                 <i class="bi bi-kanban me-1"></i> Kanban Board
+            </button>
+            <button wire:click="setViewMode('list')"
+                class="nav-link py-1 px-3 {{ $viewMode === 'list' ? 'active' : '' }}"
+                style="font-size: 0.75rem; font-weight: 600; {{ $viewMode === 'list' ? 'background: #0f172a;' : 'color: #64748b;' }}">
+                <i class="bi bi-list-task me-1"></i> List View
             </button>
         </div>
 

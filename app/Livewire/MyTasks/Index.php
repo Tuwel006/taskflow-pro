@@ -2,10 +2,10 @@
 
 namespace App\Livewire\MyTasks;
 
-use Livewire\Component;
-
-use Livewire\WithPagination;
 use App\Models\Task;
+use App\Models\TaskStatus;
+use Livewire\Component;
+use Livewire\WithPagination;
 
 class Index extends Component
 {
@@ -14,9 +14,12 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $search = '';
+
     public $status = '';
+
     public $priority = '';
-    public $viewMode = 'list'; // 'list' or 'kanban'
+
+    public $viewMode = 'kanban'; // 'list' or 'kanban'
 
     public function updatingSearch()
     {
@@ -34,7 +37,7 @@ class Index extends Component
     }
 
     protected $listeners = [
-        'taskMoved' => 'updateStatus'
+        'taskMoved' => 'updateStatus',
     ];
 
     public function setViewMode($mode)
@@ -47,18 +50,18 @@ class Index extends Component
         if ($this->viewMode === 'list') {
             $tasks = Task::with(['assignee', 'creator', 'statusRecord'])
                 ->where('assigned_to', auth()->id())
-                ->when($this->search, function($query) {
-                    $query->where(function($q) {
+                ->when($this->search, function ($query) {
+                    $query->where(function ($q) {
                         $q->where('title', 'like', '%'.$this->search.'%')
-                          ->orWhere('description', 'like', '%'.$this->search.'%');
+                            ->orWhere('description', 'like', '%'.$this->search.'%');
                     });
                 })
-                ->when($this->status && $this->status !== '', function($query) {
-                    $query->whereHas('statusRecord', function($q) {
+                ->when($this->status && $this->status !== '', function ($query) {
+                    $query->whereHas('statusRecord', function ($q) {
                         $q->where('name', $this->status);
                     });
                 })
-                ->when($this->priority && $this->priority !== '', function($query) {
+                ->when($this->priority && $this->priority !== '', function ($query) {
                     $query->where('priority', $this->priority);
                 })
                 ->latest()
@@ -68,10 +71,10 @@ class Index extends Component
         }
 
         // Kanban Mode
-        $statuses = \App\Models\TaskStatus::with(['tasks' => function($query) {
+        $statuses = TaskStatus::with(['tasks' => function ($query) {
             $query->where('assigned_to', auth()->id())
-                  ->with('assignee')
-                  ->orderBy('priority', 'desc');
+                ->with('assignee')
+                ->orderBy('priority', 'desc');
         }])->orderBy('order_index')->get();
 
         return view('livewire.my-tasks.index', compact('statuses'));
@@ -81,10 +84,10 @@ class Index extends Component
     {
         $task = Task::findOrFail($taskId);
         $task->update(['task_status_id' => $statusId]);
-        
+
         $this->dispatch('notification', [
             'type' => 'success',
-            'message' => 'Task status updated.'
+            'message' => 'Task status updated.',
         ]);
 
         $this->dispatch('taskUpdated');

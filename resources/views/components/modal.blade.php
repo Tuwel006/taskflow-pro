@@ -1,51 +1,36 @@
 @props([
-    'name',
+    'name' => null,
     'title' => 'Modal Title',
     'size' => 'md', // sm, md, lg, xl
     'maxWidth' => null,
 ])
-
 @php
-$sizeClass = match($size) {
-    'sm' => 'modal-sm',
-    'lg' => 'modal-lg',
-    'xl' => 'modal-xl',
-    default => ''
-};
-
-$maxStyle = $maxWidth ? "max-width: {$maxWidth} !important;" : "";
+    $maxWidthValue = match ($size) {
+        'sm' => '300px',
+        'md' => '500px',
+        'lg' => '800px',
+        'xl' => '1140px',
+        default => '500px',
+    };
 @endphp
 
-<div
-    x-data="{ open: false }"
-    x-on:open-modal.window="if ($event.detail === '{{ $name }}') open = true"
-    x-on:close-modal.window="if ($event.detail === '{{ $name }}') open = false"
-    x-on:keydown.escape.window="open = false"
->
+<div x-data="{ open: false, name: '{{ $name }}' }"
+    x-on:open-modal.window="if (!name || (typeof $event.detail === 'string' ? $event.detail === name : ($event.detail.name === name || (Array.isArray($event.detail) && $event.detail[0] === name)))) open = true"
+    x-on:close-modal.window="if (!name || (typeof $event.detail === 'string' ? $event.detail === name : ($event.detail.name === name || (Array.isArray($event.detail) && $event.detail[0] === name)))) open = false"
+    x-on:keydown.escape.window="open = false">
     {{-- Trigger --}}
     @isset($trigger)
         {{ $trigger }}
     @endisset
 
     {{-- Overlay --}}
-    <div
-        x-show="open"
-        x-transition.opacity
-        x-cloak
-        class="position-fixed top-0 start-0 w-100 h-100 p-3 p-md-5"
+    <div x-show="open" x-transition.opacity x-cloak class="position-fixed top-0 start-0 w-100 h-100 p-3 p-md-5"
         :class="open ? 'd-flex' : 'd-none'"
-        style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1050; overflow-y: auto; align-items: start; justify-content: center;"
-    >
+        style="background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); z-index: 1050; overflow-y: auto; align-items: start; justify-content: center;">
 
         {{-- Modal Box --}}
-        <div
-            x-show="open"
-            x-transition
-            x-cloak
-            @click.outside="open = false"
-            class="modal-dialog {{ $sizeClass }} w-100 mx-auto"
-            style="{{ $maxStyle }}"
-        >
+        <div x-show="open" x-transition x-cloak @click.outside="open = false" class="modal-dialog w-100 mx-auto"
+            style="max-width: {{ $maxWidth ?? $maxWidthValue }};">
             <div class="modal-content border-0 shadow-lg rounded-4 overflow-hidden" style="background: #ffffff;">
 
                 {{-- Header --}}

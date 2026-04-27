@@ -213,6 +213,10 @@
                 <span class="nav-badge">{{ str_pad($teamTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
             @endif
         </a>
+        <a href="/task-types" wire:navigate class="nav-link {{ request()->is('task-types*') ? 'active' : '' }}">
+            <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>
+            Task Types
+        </a>
     </nav>
 
     <div class="sidebar-footer">
