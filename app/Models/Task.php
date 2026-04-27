@@ -14,11 +14,17 @@ class Task extends Model
         'title',
         'description',
         'task_status_id',
+        'task_type_id',
         'priority',
         'due_date',
         'assigned_to',
         'created_by',
     ];
+
+    public function type()
+    {
+        return $this->belongsTo(TaskType::class, 'task_type_id');
+    }
 
     public function statusRecord()
     {

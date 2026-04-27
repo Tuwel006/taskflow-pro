@@ -12,6 +12,8 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
+    protected $listeners = ['task-created' => '$refresh'];
+
     public $search = '';
     public $status = '';
     public $priority = '';
