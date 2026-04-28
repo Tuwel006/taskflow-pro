@@ -1,9 +1,3 @@
-import './bootstrap';
-
-// In Livewire 3, Alpine is auto-injected.
-// Do not manually import or start Alpine here as it will conflict
-// with Livewire's internal instance and cause full page reloads.
-
 import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
@@ -18,10 +12,3 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
 });
-
-window.Echo.private(`App.Models.User.${window.userId}`)
-    .notification((notification) => {
-        console.log('Received:', notification);
-
-        Livewire.dispatch('refreshNotifications');
-    });

@@ -2,30 +2,43 @@
 
 namespace App\Livewire\Task;
 
-use Livewire\Component;
-use App\Models\User;
+use App\Events\TaskCreated;
 use App\Models\Task;
+use App\Models\TaskStatus;
+use App\Models\TaskType;
+use App\Models\User;
+use Livewire\Component;
 
 class Create extends Component
 {
     public $title;
+
     public $description;
+
     public $status_id;
+
     public $task_type_id;
+
     public $priority = 'Medium';
+
     public $due_date;
+
     public $assigned_to;
+
     public $users;
+
     public $statuses;
+
     public $taskTypes;
+
     public $inModal = false;
 
     public function mount()
     {
         $this->users = User::all();
-        $this->statuses = \App\Models\TaskStatus::orderBy('order_index')->get();
-        $this->taskTypes = \App\Models\TaskType::where('is_active', true)->get();
-        
+        $this->statuses = TaskStatus::orderBy('order_index')->get();
+        $this->taskTypes = TaskType::where('is_active', true)->get();
+
         $this->status_id = $this->statuses->first()->id ?? null;
         $this->task_type_id = $this->taskTypes->first()->id ?? null;
         $this->due_date = now()->format('Y-m-d');
@@ -59,14 +72,14 @@ class Create extends Component
             'created_by' => auth()->id(),
         ]);
 
-        // event(new \App\Events\TaskCreated($task));
+        event(new TaskCreated($task));
 
         session()->flash('message', 'Task created successfully');
 
         $this->dispatch('task-created');
         $this->dispatch('close-modal', name: 'create-task');
-        
-        if (!$this->inModal) {
+
+        if (! $this->inModal) {
             return $this->redirect('/tasks', navigate: true);
         }
 

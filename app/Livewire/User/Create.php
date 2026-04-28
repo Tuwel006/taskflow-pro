@@ -2,20 +2,27 @@
 
 namespace App\Livewire\User;
 
-use Livewire\Component;
-
 use App\Models\User;
+use Livewire\Component;
 
 class Create extends Component
 {
     public $name;
+
     public $email;
+
     public $phone;
+
     public $address;
+
     public $role;
+
     public $type = 0;
+
     public $password;
+
     public $avatar;
+
     public $is_active = true;
 
     public function render()
@@ -38,6 +45,9 @@ class Create extends Component
         ]);
 
         User::create($validated);
+
+        // Fire the custom 'published' event
+        $this->fireModelEvent('status_changed', false);
 
         session()->flash('success', 'User created successfully');
 

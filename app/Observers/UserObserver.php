@@ -39,4 +39,11 @@ class UserObserver
     {
         //
     }
+
+    public function status_changed(User $user)
+    {
+        dd($user);
+        // Logic to run when a post is published, e.g., send notifications
+        \Log::info("Post {$user->id} has been published!");
+    }
 }

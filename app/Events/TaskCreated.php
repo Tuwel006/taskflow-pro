@@ -4,9 +4,7 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -18,6 +16,7 @@ class TaskCreated
      * Create a new event instance.
      */
     public $task;
+
     public function __construct($task)
     {
         $this->task = $task;
@@ -28,10 +27,18 @@ class TaskCreated
      *
      * @return array<int, Channel>
      */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
-    }
+    // public function broadcastOn(): array
+    // {
+    //     return [
+    //         new PrivateChannel('tasks-created'),
+    //     ];
+    // }
+
+    // /**
+    //  * The name of the queue on which to place the broadcasting job.
+    //  */
+    // public function broadcastQueue(): string
+    // {
+    //     return 'default';
+    // }
 }

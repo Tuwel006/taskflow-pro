@@ -92,5 +92,8 @@
     @livewireScripts
 
 </body>
+<script>
+    window.userId = {{ auth()->id() }};
+</script>
 
 </html>

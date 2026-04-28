@@ -26,6 +26,19 @@ class User extends Authenticatable
         'type',
     ];
 
+    protected $observables = [
+        'status_changed',
+    ];
+
+    protected static function booted()
+    {
+        static::updated(function ($user) {
+            if ($user->wasChanged('is_active')) {
+                $user->fireModelEvent('status_changed', false);
+            }
+        });
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

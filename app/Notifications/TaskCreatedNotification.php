@@ -15,6 +15,7 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
      * Create a new notification instance.
      */
     public $task;
+
     public function __construct($task)
     {
         $this->task = $task;
@@ -27,7 +28,7 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['database', 'mail'];
+        return ['database', 'mail', 'broadcast'];
     }
 
     /**
@@ -36,7 +37,7 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('New Task Assigned: ' . $this->task->title)
+            ->subject('New Task Assigned: '.$this->task->title)
             ->view('emails.task-created', [
                 'name' => $notifiable->name,
                 'taskTitle' => $this->task->title,
@@ -59,6 +60,20 @@ class TaskCreatedNotification extends Notification implements ShouldQueue
             'task_created_at' => $this->task->created_at,
             'task_updated_at' => $this->task->updated_at,
         ];
+    }
+
+    public function toBroadcast(object $notifiable): BroadcastMessage
+    {
+        return new BroadcastMessage([
+            'task_id' => $this->task->id,
+            'task_title' => $this->task->title,
+            'task_description' => $this->task->description,
+            'task_status' => $this->task->status,
+            'task_priority' => $this->task->priority,
+            'task_due_date' => $this->task->due_date,
+            'task_created_at' => $this->task->created_at,
+            'task_updated_at' => $this->task->updated_at,
+        ]);
     }
 
     /**
