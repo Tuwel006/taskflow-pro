@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\Channels;
+use App\Models\Teams;
 use Illuminate\Database\Seeder;
 
-class ChannelsSeeder extends Seeder
+class TeamsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        $channels = [
+        $teams = [
             ['name' => 'Facebook', 'prefix' => 'FB'],
             ['name' => 'Instagram', 'prefix' => 'IG'],
             ['name' => 'Twitter', 'prefix' => 'TW'],
@@ -25,8 +25,8 @@ class ChannelsSeeder extends Seeder
             ['name' => 'Phone', 'prefix' => 'PH'],
         ];
 
-        foreach ($channels as $channel) {
-            Channels::create($channel);
+        foreach ($teams as $team) {
+            Teams::create($team);
         }
     }
 }

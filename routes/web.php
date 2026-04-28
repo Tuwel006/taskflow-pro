@@ -1,12 +1,11 @@
 <?php
 
 use App\Livewire\Auth\Login;
-use App\Livewire\Channels\Index as ChannelIndex;
 use App\Livewire\Dashboard;
-use App\Livewire\MyTasks\Index;
 use App\Livewire\Task\Create as TaskCreate;
 use App\Livewire\Task\Index as TaskIndex;
 use App\Livewire\TaskTypes\Index as TaskTypeIndex;
+use App\Livewire\Teams\Index as TeamIndex;
 use App\Livewire\User\Create as UserCreate;
 use App\Livewire\User\Edit as UserEdit;
 use App\Livewire\User\Index as UserIndex;
@@ -33,11 +32,10 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('login');
     })->name('logout');
     Route::get('/tasks/create', TaskCreate::class)->name('tasks.create');
-    Route::get('/my-tasks', Index::class)->name('my-tasks');
-    Route::get('/teams', ChannelIndex::class)->name('teams');
+    Route::get('/tasks', TeamIndex::class)->name('tasks');
     Route::get('/task-types', TaskTypeIndex::class)->name('task-types');
 });
 
 // Route::middleware(['guest'])->group(function () {
-Route::get('/login', Login::class)->name('login')->middleware('guest')->middleware('throttle:2,1');
+Route::get('/login', Login::class)->name('login')->middleware('guest');
 // });

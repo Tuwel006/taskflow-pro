@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 
 class NotificationDropdown extends Component
 {
+    protected $listeners = ['refreshNotifications' => '$refresh'];
     public function getNotificationsProperty()
     {
         return Auth::user()->unreadNotifications()->latest()->take(5)->get();

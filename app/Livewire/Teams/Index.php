@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Livewire\MyTasks;
+namespace App\Livewire\Teams;
 
 use App\Models\Task;
 use App\Models\TaskStatus;
+use App\Models\Teams;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -19,7 +20,17 @@ class Index extends Component
 
     public $priority = '';
 
-    public $viewMode = 'kanban'; // 'list' or 'kanban'
+    public $selectedTeam = '';
+
+    public $viewMode = 'list'; // 'list' or 'kanban'
+
+    public function mount()
+    {
+        $firstTeam = Teams::where('is_active', true)->first();
+        if ($firstTeam) {
+            $this->selectedTeam = $firstTeam->id;
+        }
+    }
 
     public function updatingSearch()
     {
@@ -36,6 +47,11 @@ class Index extends Component
         $this->resetPage();
     }
 
+    public function updatingSelectedTeam()
+    {
+        $this->resetPage();
+    }
+
     protected $listeners = [
         'taskMoved' => 'updateStatus',
     ];
@@ -47,9 +63,13 @@ class Index extends Component
 
     public function render()
     {
+        $teams = Teams::where('is_active', true)->get();
+
         if ($this->viewMode === 'list') {
-            $tasks = Task::with(['assignee', 'creator', 'statusRecord'])
-                ->where('assigned_to', auth()->id())
+            $tasks = Task::with(['assignee', 'creator', 'statusRecord', 'team'])
+                ->when($this->selectedTeam, function ($query) {
+                    $query->where('team_id', $this->selectedTeam);
+                })
                 ->when($this->search, function ($query) {
                     $query->where(function ($q) {
                         $q->where('title', 'like', '%'.$this->search.'%')
@@ -67,17 +87,19 @@ class Index extends Component
                 ->latest()
                 ->paginate(10);
 
-            return view('livewire.my-tasks.index', compact('tasks'));
+            return view('livewire.teams.index', compact('tasks', 'teams'));
         }
 
         // Kanban Mode
         $statuses = TaskStatus::with(['tasks' => function ($query) {
-            $query->where('assigned_to', auth()->id())
-                ->with('assignee')
-                ->orderBy('priority', 'desc');
+            $query->when($this->selectedTeam, function ($q) {
+                $q->where('team_id', $this->selectedTeam);
+            })
+            ->with('assignee', 'team')
+            ->orderBy('priority', 'desc');
         }])->orderBy('order_index')->get();
 
-        return view('livewire.my-tasks.index', compact('statuses'));
+        return view('livewire.teams.index', compact('statuses', 'teams'));
     }
 
     public function updateStatus($taskId, $statusId)

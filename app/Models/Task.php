@@ -15,6 +15,7 @@ class Task extends Model
         'description',
         'task_status_id',
         'task_type_id',
+        'team_id',
         'priority',
         'due_date',
         'assigned_to',
@@ -29,6 +30,11 @@ class Task extends Model
     public function statusRecord()
     {
         return $this->belongsTo(TaskStatus::class, 'task_status_id');
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Teams::class, 'team_id');
     }
 
     public function assignee()

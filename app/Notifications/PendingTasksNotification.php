@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class PendingTasksNotification extends Notification implements ShouldQueue
 {
@@ -14,7 +15,7 @@ class PendingTasksNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(public int $tasks = 0)
     {
         //
     }
@@ -34,7 +35,12 @@ class PendingTasksNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        \Log::info("PendingTasksNotification {$notifiable->tasks}");
+        Log::info('PendingTasksNotification sent to: ' . $notifiable->email);
+
+        return (new MailMessage)
+            ->subject('You have pending tasks')
+            ->line("You have {$this->tasks} pending task(s) that need your attention.")
+            ->action('View Tasks', url('/'));
     }
 
     /**
