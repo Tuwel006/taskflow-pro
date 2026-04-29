@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Teams;
+namespace App\Livewire\TaskStatus;
 
-use App\Models\Teams;
+use App\Models\TaskStatus;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,18 +12,15 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $status = true;
-
     public $search;
 
     public $itemPerPage = 10;
 
     public function render()
     {
-        $teams = Teams::where('is_active', $this->status)
-            ->where('name', 'like', "%{$this->search}%")
+        $taskStatuses = TaskStatus::where('name', 'like', "%{$this->search}%")
             ->paginate($this->itemPerPage);
 
-        return view('livewire.teams.index', compact('teams'));
+        return view('livewire.task-status.index', compact('taskStatuses'));
     }
 }

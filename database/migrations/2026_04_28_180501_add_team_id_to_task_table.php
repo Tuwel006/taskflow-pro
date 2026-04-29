@@ -13,9 +13,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('task', function (Blueprint $table) {
-            $table->unsignedBigInteger('team_id')->nullable()->change();
+            $table->unsignedBigInteger('team_id')->nullable();
         });
-        DB::table('task')->update(['team_id' => null]);
         Schema::table('task', function (Blueprint $table) {
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
         });

@@ -1,9 +1,9 @@
 <div>
-    <x-page-header title="Teams" subtitle="Manage your teams" :breadcrumbItems="[['label' => 'Teams', 'url' => '/teams'], ['label' => 'List']]">
+    <x-page-header title="Task Statuses" subtitle="Manage task statuses" :breadcrumbItems="[['label' => 'Task Statuses', 'url' => '/task-statuses'], ['label' => 'List']]">
         <x-slot name="actions">
-            <a href="/teams/create" wire:navigate class="btn btn-primary px-3 shadow-sm d-flex align-items-center"
+            <a href="/task-statuses/create" wire:navigate class="btn btn-primary px-3 shadow-sm d-flex align-items-center"
                 style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px; background: #0f172a; border: none;">
-                <i class="bi bi-plus me-2"></i> Add Team
+                <i class="bi bi-plus me-2"></i> Add Status
             </a>
         </x-slot>
     </x-page-header>
@@ -28,7 +28,7 @@
         </div>
     @endif
 
-    <x-data-table :items="$teams" emptyIcon="bi-people" emptyText="No team records found matching your criteria.">
+    <x-data-table :items="$taskStatuses" emptyIcon="bi-list-check" emptyText="No task status records found matching your criteria.">
         <x-slot name="header">
             <div class="row g-2 align-items-center">
                 <div class="col-md-4">
@@ -52,11 +52,6 @@
                             <option value="50">50</option>
                         </select>
                     </div>
-                    <select wire:model.live="status" class="form-select form-select-sm" style="width: 130px;">
-                        <option value="2">All Status</option>
-                        <option value="1">Active</option>
-                        <option value="0">Inactive</option>
-                    </select>
                 </div>
             </div>
         </x-slot>
@@ -64,52 +59,37 @@
         <x-slot name="columns">
             <x-table.th>No</x-table.th>
             <x-table.th>Name</x-table.th>
-            <x-table.th>Prefix</x-table.th>
-            <x-table.th>Status</x-table.th>
+            <x-table.th>Color</x-table.th>
             <x-table.th align="end"></x-table.th>
         </x-slot>
 
-        @foreach ($teams as $team)
-            <x-table.row wire:key="team-{{ $team->id }}">
+        @foreach ($taskStatuses as $status)
+            <x-table.row wire:key="status-{{ $status->id }}">
                 <x-table.td>
                     <div class="d-flex align-items-center gap-3">
                         <div>
-                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $team->id }}</div>
+                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $status->id }}</div>
                         </div>
                     </div>
                 </x-table.td>
                 <x-table.td>
                     <div class="d-flex align-items-center gap-3">
                         <div>
-                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $team->name }}</div>
+                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $status->name }}</div>
                         </div>
                     </div>
                 </x-table.td>
 
                 <x-table.td>
-                    <div class="d-flex flex-column">
-                        <span class="fw-bold text-dark"
-                            style="font-size: 0.875rem;">{{ $team->prefix ?? 'N/A' }}</span>
+                    <div class="d-flex align-items-center gap-2">
+                        <div class="rounded-circle" style="width: 16px; height: 16px; background-color: {{ $status->color }};"></div>
+                        <span class="text-muted small">{{ $status->color }}</span>
                     </div>
-                </x-table.td>
-
-                <x-table.td>
-                    @if ($team->is_active)
-                        <span class="badge bg-success-subtle text-success border border-success-subtle"
-                            style="font-size: 0.65rem; font-weight: 600; padding: 0.35em 0.65em;">
-                            <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Active
-                        </span>
-                    @else
-                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"
-                            style="font-size: 0.65rem; font-weight: 600; padding: 0.35em 0.65em;">
-                            <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Inactive
-                        </span>
-                    @endif
                 </x-table.td>
 
                 <x-table.td align="end">
                     <div class="d-flex justify-content-end gap-2">
-                        <a href="/teams/{{ $team->id }}/edit" wire:navigate
+                        <a href="/task-statuses/{{ $status->id }}/edit" wire:navigate
                             class="btn btn-sm btn-outline-secondary border-0" style="font-size: 0.75rem;"
                             title="Edit">
                             <i class="bi bi-pencil"></i>

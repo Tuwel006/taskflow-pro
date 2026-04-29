@@ -166,21 +166,6 @@
             <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
             Overview
         </a>
-        <a href="/my-tasks" wire:navigate class="nav-link {{ request()->is('my-tasks*') ? 'active' : '' }}">
-            <span class="nav-icon"><i class="bi bi-check2-square"></i></span>
-            My Tasks
-            @php
-                $myTaskCount = \App\Models\Task::where('assigned_to', auth()->id())
-                    ->whereHas('statusRecord', function ($q) {
-                        $q->where('name', '!=', 'Completed');
-                    })
-                    ->count();
-            @endphp
-            @if ($myTaskCount > 0)
-                <span class="nav-badge"
-                    style="background: rgba(16, 185, 129, 0.2); color: #10b981;">{{ str_pad($myTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
-            @endif
-        </a>
         <a href="#" wire:navigate class="nav-link">
             <span class="nav-icon"><i class="bi bi-folder2"></i></span>
             Projects
@@ -201,9 +186,13 @@
             <span class="nav-icon"><i class="bi bi-chat-left-text"></i></span>
             Teams
         </a>
+        <a href="/task-statuses" wire:navigate class="nav-link {{ request()->is('task-statuses*') ? 'active' : '' }}">
+            <span class="nav-icon"><i class="bi bi-list-check"></i></span>
+            Task Statuses
+        </a>
         <a href="/tasks" wire:navigate class="nav-link {{ request()->is('tasks*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>
-            Team Tasks
+             Tasks
             @php
                 $teamTaskCount = \App\Models\Task::whereHas('statusRecord', function ($q) {
                     $q->where('name', '!=', 'Completed');

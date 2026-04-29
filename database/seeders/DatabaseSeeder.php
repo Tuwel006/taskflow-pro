@@ -28,5 +28,11 @@ class DatabaseSeeder extends Seeder
             'address' => '123 Main St',
             'avatar' => 'https://via.placeholder.com/150',
         ]);
+
+        $this->call([
+            TaskStatusSeeder::class,
+            TaskTypeSeeder::class,
+            TeamsSeeder::class,
+        ]);
     }
 }
