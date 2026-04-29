@@ -59,4 +59,13 @@ class Task extends Model
             ->where('to_status_id', $newStatusId)
             ->exists();
     }
+
+    public function getAllowedStatuses()
+    {
+        $toStatusIds = Workflow::where('team_id', $this->team_id)
+            ->where('from_status_id', $this->task_status_id)
+            ->pluck('to_status_id');
+
+        return TaskStatus::whereIn('id', $toStatusIds)->get();
+    }
 }

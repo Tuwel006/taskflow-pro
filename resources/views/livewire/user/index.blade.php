@@ -78,13 +78,19 @@
                             <option value="50">50</option>
                         </select>
                     </div>
-                    <select class="form-select form-select-sm" style="width: 130px;">
+                    <select class="form-select form-select-sm" style="width: 130px;" wire:model.live="selectedTeamId">
+                        <option value="">All Teams</option>
+                        @foreach($teams as $team)
+                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                        @endforeach
+                    </select>
+                    <select class="form-select form-select-sm" style="width: 120px;">
                         <option>All Roles</option>
                         <option>Admin</option>
                         <option>Manager</option>
                         <option>User</option>
                     </select>
-                    <select class="form-select form-select-sm" style="width: 130px;">
+                    <select class="form-select form-select-sm" style="width: 120px;">
                         <option>All Status</option>
                         <option>Active</option>
                         <option>Inactive</option>

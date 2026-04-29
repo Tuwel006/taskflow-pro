@@ -80,8 +80,8 @@
 
     {{-- ═══════════════════════════════ LIST VIEW ═══════════════════════════════ --}}
     @if ($viewMode === 'list')
-        <div class="card border-0 shadow-sm" style="border-radius:12px;overflow:hidden;">
-            <div class="table-responsive">
+        <div class="card border-0 shadow-sm" style="border-radius:12px; overflow: visible;">
+            <div class="table-responsive" style="overflow: visible;">
                 <table class="table table-hover align-middle mb-0" style="font-size:0.8125rem;">
                     <thead>
                         <tr style="background:linear-gradient(135deg,#1e293b 0%,#334155 100%);color:#fff;">
@@ -197,11 +197,36 @@
                                 </td>
                                 {{-- Status --}}
                                 <td style="padding:0.75rem 1rem;white-space:nowrap;">
-                                    <span class="d-inline-flex align-items-center gap-1 badge"
-                                        style="font-size:0.68rem;background:{{ $statusColor }}18;color:{{ $statusColor }};border:1px solid {{ $statusColor }}44;padding:0.28rem 0.65rem;border-radius:50px;">
-                                        <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i>
-                                        {{ $task->statusRecord->name ?? '—' }}
-                                    </span>
+                                    <div class="dropdown">
+                                        <button class="btn btn-link p-0 text-decoration-none shadow-none border-0 d-flex align-items-center gap-1"
+                                            type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-boundary="viewport">
+                                            <span class="d-inline-flex align-items-center gap-1 badge transition hover-lift"
+                                                style="font-size:0.68rem;background:{{ $statusColor }}18;color:{{ $statusColor }};border:1px solid {{ $statusColor }}44;padding:0.28rem 0.65rem;border-radius:50px; cursor: pointer;">
+                                                <i class="bi bi-circle-fill" style="font-size:0.35rem;"></i>
+                                                {{ $task->statusRecord->name ?? '—' }}
+                                                <i class="bi bi-chevron-down opacity-50 ms-1" style="font-size: 0.5rem;"></i>
+                                            </span>
+                                        </button>
+                                        <ul class="dropdown-menu shadow-lg border-0 rounded-3 py-2 animate slideIn" style="font-size: 0.75rem; min-width: 160px; border: 1px solid #e2e8f0 !important; z-index: 1050 !important;">
+                                            <li class="px-3 pb-2 border-bottom mb-2 text-muted fw-bold text-uppercase" style="font-size: 0.6rem; letter-spacing: 0.5px;">Update Flow</li>
+                                            @php 
+                                                $allowed = $task->getAllowedStatuses(); 
+                                                $currentStatusName = $task->statusRecord->name ?? 'Unknown';
+                                            @endphp
+                                            @forelse($allowed as $astatus)
+                                                <li>
+                                                    <button wire:click="changeStatus({{ $task->id }}, {{ $astatus->id }})" class="dropdown-item d-flex align-items-center gap-2 py-2 fw-medium">
+                                                        <span class="dot" style="background: {{ $astatus->color }}; width: 8px; height: 8px; border-radius: 50%;"></span>
+                                                        <span class="text-muted small">{{ $currentStatusName }}</span>
+                                                        <i class="bi bi-arrow-right text-muted opacity-50 mx-1" style="font-size: 0.6rem;"></i>
+                                                        <span class="text-dark">{{ $astatus->name }}</span>
+                                                    </button>
+                                                </li>
+                                            @empty
+                                                <li><span class="dropdown-item text-muted disabled small">No paths defined</span></li>
+                                            @endforelse
+                                        </ul>
+                                    </div>
                                 </td>
                                 {{-- Reporter --}}
                                 <td style="padding:0.75rem 1rem;white-space:nowrap;">

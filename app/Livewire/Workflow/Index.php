@@ -72,7 +72,7 @@ class Index extends Component
             ->exists();
 
         if ($exists) {
-            session()->flash('error', 'This status is already assigned to this team.');
+            $this->dispatch('toast', ['message' => 'This status is already assigned to this team.', 'type' => 'danger']);
             return;
         }
 
@@ -82,14 +82,14 @@ class Index extends Component
                 'status_id' => $this->stageStatusId,
                 'position' => $this->stagePosition,
             ]);
-            session()->flash('success', 'Stage updated successfully.');
+            $this->dispatch('toast', ['message' => 'Stage updated successfully.', 'type' => 'success']);
         } else {
             Stage::create([
                 'team_id' => $this->selectedTeamId,
                 'status_id' => $this->stageStatusId,
                 'position' => $this->stagePosition,
             ]);
-            session()->flash('success', 'Stage added successfully.');
+            $this->dispatch('toast', ['message' => 'Stage added successfully.', 'type' => 'success']);
         }
 
         $this->resetStageForm();
@@ -105,7 +105,7 @@ class Index extends Component
     public function deleteStage($id)
     {
         Stage::where('id', $id)->where('team_id', $this->selectedTeamId)->delete();
-        session()->flash('success', 'Workflow stage deleted successfully.');
+        $this->dispatch('toast', ['message' => 'Workflow stage deleted successfully.', 'type' => 'success']);
     }
 
     public function addTransition()
@@ -119,7 +119,7 @@ class Index extends Component
             ->exists();
 
         if ($exists) {
-            session()->flash('error', 'This transition already exists.');
+            $this->dispatch('toast', ['message' => 'This transition already exists.', 'type' => 'danger']);
             return;
         }
 
@@ -130,14 +130,14 @@ class Index extends Component
         ]);
 
         $this->reset(['fromStatusId', 'toStatusId']);
-        session()->flash('success', 'Transition added successfully.');
+        $this->dispatch('toast', ['message' => 'Transition added successfully.', 'type' => 'success']);
     }
 
     public function deleteTransition($id)
     {
         $workflow = Workflow::where('team_id', $this->selectedTeamId)->findOrFail($id);
         $workflow->delete();
-        session()->flash('success', 'Transition removed.');
+        $this->dispatch('toast', ['message' => 'Transition removed.', 'type' => 'success']);
     }
 
     public function render()

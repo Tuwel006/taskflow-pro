@@ -23,7 +23,7 @@ class Board extends Component
 
     public $selectedTeam = '';
 
-    public $viewMode = 'list'; // 'list' or 'kanban'
+    public $viewMode = 'kanban'; // 'list' or 'kanban'
 
     public function mount()
     {
@@ -110,6 +110,29 @@ class Board extends Component
         return view('livewire.task.board', compact('stages', 'teams'));
     }
 
+    public function changeStatus($taskId, $statusId)
+    {
+        $task = Task::findOrFail($taskId);
+        $status = TaskStatus::findOrFail($statusId);
+
+        if (!$task->canTransitionTo($statusId)) {
+            $this->dispatch('toast', [
+                'type'    => 'danger',
+                'message' => 'Transition to ' . $status->name . ' is not allowed.',
+            ]);
+            return;
+        }
+
+        $task->update(['task_status_id' => $statusId]);
+
+        $this->dispatch('toast', [
+            'type'    => 'success',
+            'message' => 'Task updated to ' . $status->name . '.',
+        ]);
+
+        $this->dispatch('taskUpdated');
+    }
+
     public function updateStatus($taskId, $stageId)
     {
         // stageId comes from the kanban drop-zone data-stage-id attribute.
@@ -123,16 +146,16 @@ class Board extends Component
 
         // Check if transition is allowed by workflow
         if (!$task->canTransitionTo($stage->status_id)) {
-            $this->dispatch('notification', [
-                'type'    => 'warning',
-                'message' => 'Transition from ' . ($task->statusRecord->name ?? 'current status') . ' to ' . ($stage->status->name ?? 'new status') . ' is not allowed for this team.',
+            $this->dispatch('toast', [
+                'type'    => 'danger',
+                'message' => 'Transition to ' . ($stage->status->name ?? 'new status') . ' is not allowed.',
             ]);
             return;
         }
 
         $task->update(['task_status_id' => $stage->status_id]);
 
-        $this->dispatch('notification', [
+        $this->dispatch('toast', [
             'type'    => 'success',
             'message' => 'Task moved to ' . ($stage->status->name ?? 'new stage') . '.',
         ]);

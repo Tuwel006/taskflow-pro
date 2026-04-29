@@ -84,6 +84,7 @@
             </main>
 
         </div>
+        <x-toast />
     </div>
 
     {{-- Bootstrap 5 JS Bundle (Popper included) --}}
