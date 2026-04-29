@@ -15,11 +15,11 @@
             </div> --}}
         </div>
         <div class="d-flex align-items-center gap-2 mt-1">
-    <span class="badge bg-primary-subtle text-primary border fw-medium px-2 py-1">
-        <i class="bi bi-people-fill me-1"></i>
-        {{ $curr_team->name }}
-    </span>
-</div>
+            <span class="badge bg-primary-subtle text-primary border fw-medium px-2 py-1">
+                <i class="bi bi-people-fill me-1"></i>
+                {{ $curr_team->name }}
+            </span>
+        </div>
         @if ($inModal)
             <button type="button" @click="open = false" class="btn-close shadow-none"
                 style="font-size: 0.75rem;"></button>
@@ -43,11 +43,41 @@
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Task Type</label>
-                <select wire:model.live="task_type_id" class="form-select form-select-sm custom-input">
-                    @foreach ($taskTypes as $type)
-                        <option value="{{ $type->id }}">{{ $type->name }}</option>
-                    @endforeach
-                </select>
+                <div class="position-relative" x-data="{ open: false }">
+                    <button type="button" @click="open = !open"
+                        class="form-select form-select-sm custom-input d-flex align-items-center gap-2 text-start w-100 shadow-none">
+                        @php $selectedType = $taskTypes->firstWhere('id', $task_type_id); @endphp
+                        @if ($selectedType)
+                            <span style="color: {{ $selectedType->color ?? '#64748b' }};">
+                                {!! $selectedType->icon !!}
+                            </span>
+                            <span>{{ $selectedType->name }}</span>
+                        @else
+                            <span class="text-muted">Select Type</span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        @click.away="open = false"
+                        class="position-absolute z-3 mt-1 bg-white border rounded shadow w-100 overflow-hidden"
+                        style="display: none; top: 100%; min-width: 180px;">
+                        @foreach ($taskTypes as $type)
+                            <div @click="$wire.set('task_type_id', {{ $type->id }}); open = false"
+                                class="px-3 py-2 d-flex align-items-center gap-2 cursor-pointer custom-dropdown-item {{ $task_type_id == $type->id ? 'selected' : '' }}">
+                                <span style="color: {{ $type->color ?? '#64748b' }}; width: 18px; text-align: center;">
+                                    {!! $type->icon !!}
+                                </span>
+                                <span class="small">{{ $type->name }}</span>
+                                @if ($task_type_id == $type->id)
+                                    <i class="bi bi-check2 ms-auto text-primary" style="font-size: 0.8rem;"></i>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Status</label>
@@ -63,12 +93,41 @@
         <div class="row g-3 mb-3">
             <div class="col-md-6">
                 <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Priority</label>
-                <select wire:model="priority" class="form-select form-select-sm custom-input">
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                    <option value="Urgent">Urgent</option>
-                </select>
+                <div class="position-relative" x-data="{ open: false }">
+                    <button type="button" @click="open = !open"
+                        class="form-select form-select-sm custom-input d-flex align-items-center gap-2 text-start w-100 shadow-none">
+                        @php $selectedPriority = collect($priorities)->firstWhere('name', $priority); @endphp
+                        @if ($selectedPriority)
+                            <span style="color: {{ $selectedPriority['color'] ?? '#64748b' }};">
+                                {!! $selectedPriority['icon'] !!}
+                            </span>
+                            <span>{{ $selectedPriority['name'] }}</span>
+                        @else
+                            <span class="text-muted">Select Priority</span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        @click.away="open = false"
+                        class="position-absolute z-3 mt-1 bg-white border rounded shadow w-100 overflow-hidden"
+                        style="display: none; top: 100%; min-width: 180px;">
+                        @foreach ($priorities as $p)
+                            <div @click="$wire.set('priority', '{{ $p['name'] }}'); open = false"
+                                class="px-3 py-2 d-flex align-items-center gap-2 cursor-pointer custom-dropdown-item {{ $priority == $p['name'] ? 'selected' : '' }}">
+                                <span style="color: {{ $p['color'] ?? '#64748b' }}; width: 18px; text-align: center;">
+                                    {!! $p['icon'] !!}
+                                </span>
+                                <span class="small">{{ $p['name'] }}</span>
+                                @if ($priority == $p['name'])
+                                    <i class="bi bi-check2 ms-auto text-primary" style="font-size: 0.8rem;"></i>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
             <div class="col-md-6">
                 <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Due Date</label>
@@ -78,27 +137,54 @@
             </div>
         </div>
 
-        {{-- Assignee --}}
-        <div class="mb-3 border-top pt-3 mt-4">
-            <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Assignee</label>
-            <div class="d-flex align-items-center gap-2">
-                @php $assignee = $users->firstWhere('id', $assigned_to); @endphp
-                @if ($assignee)
-                    <x-user-avatar :user="$assignee" size="28px" />
-                @else
-                    <div class="bg-light rounded-circle border d-flex align-items-center justify-content-center text-muted"
-                        style="width: 28px; height: 28px;">
-                        <i class="bi bi-person"></i>
+            <div class="mb-3 border-top pt-3 mt-4">
+                <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Assignee</label>
+                <div class="position-relative" x-data="{ open: false }">
+                    <button type="button" @click="open = !open"
+                        class="form-select form-select-sm custom-input d-flex align-items-center gap-2 text-start w-100 shadow-none">
+                        @php $assignee = $users->firstWhere('id', $assigned_to); @endphp
+                        @if ($assignee)
+                            <x-user-avatar :user="$assignee" size="20px" />
+                            <span>{{ $assignee->name }}</span>
+                        @else
+                            <div class="bg-light rounded-circle border d-flex align-items-center justify-content-center text-muted"
+                                style="width: 20px; height: 20px; font-size: 0.7rem;">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <span class="text-muted">Unassigned</span>
+                        @endif
+                    </button>
+
+                    <div x-show="open" 
+                        x-transition:enter="transition ease-out duration-100"
+                        x-transition:enter-start="opacity-0 transform scale-95"
+                        x-transition:enter-end="opacity-100 transform scale-100"
+                        @click.away="open = false"
+                        class="position-absolute z-3 mt-1 bg-white border rounded shadow w-100 overflow-hidden"
+                        style="display: none; top: 100%; min-width: 200px;">
+                        
+                        <div @click="$wire.set('assigned_to', ''); open = false"
+                            class="px-3 py-2 d-flex align-items-center gap-2 cursor-pointer custom-dropdown-item {{ !$assigned_to ? 'selected' : '' }}">
+                            <div class="bg-light rounded-circle border d-flex align-items-center justify-content-center text-muted"
+                                style="width: 20px; height: 20px; font-size: 0.7rem;">
+                                <i class="bi bi-person"></i>
+                            </div>
+                            <span class="small">Unassigned</span>
+                        </div>
+
+                        @foreach ($users as $user)
+                            <div @click="$wire.set('assigned_to', {{ $user->id }}); open = false"
+                                class="px-3 py-2 d-flex align-items-center gap-2 cursor-pointer custom-dropdown-item {{ $assigned_to == $user->id ? 'selected' : '' }}">
+                                <x-user-avatar :user="$user" size="20px" />
+                                <span class="small">{{ $user->name }}</span>
+                                @if ($assigned_to == $user->id)
+                                    <i class="bi bi-check2 ms-auto text-primary" style="font-size: 0.8rem;"></i>
+                                @endif
+                            </div>
+                        @endforeach
                     </div>
-                @endif
-                <select wire:model.live="assigned_to" class="form-select form-select-sm custom-input flex-grow-1">
-                    <option value="">Unassigned</option>
-                    @foreach ($users as $user)
-                        <option value="{{ $user->id }}">{{ $user->name }}</option>
-                    @endforeach
-                </select>
+                </div>
             </div>
-        </div>
 
         {{-- Description --}}
         <div class="mb-4">
@@ -222,6 +308,29 @@
         textarea.custom-input::-webkit-scrollbar-thumb {
             background-color: #cbd5e1;
             border-radius: 10px;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .custom-dropdown-item {
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .custom-dropdown-item:hover {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        .custom-dropdown-item.selected {
+            background-color: #f1f5f9;
+            font-weight: 500;
+        }
+
+        .custom-dropdown-item i {
+            font-size: 1rem;
         }
     </style>
 </div>

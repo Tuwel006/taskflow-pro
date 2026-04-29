@@ -17,7 +17,7 @@
     $bgColor = $colors[$colorIndex];
 @endphp
 
-<div {{ $attributes->merge(['class' => 'd-inline-block position-relative overflow-hidden']) }}
+<div {{ $attributes->merge(['class' => 'd-inline-block position-relative overflow-hidden', 'title' => $name . ($user && !empty($user->email) ? ' (' . $user->email . ')' : '')]) }}
     style="width: {{ $size }}; height: {{ $size }}; flex-shrink: 0; border-radius: 50%;"
     x-data="{ imgError: false }">
 

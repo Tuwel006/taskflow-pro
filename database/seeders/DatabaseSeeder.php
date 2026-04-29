@@ -18,17 +18,19 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // 1. Create the main Admin User
-        $admin = User::create([
-            'name' => 'Tuwel Shaikh',
-            'email' => 'tuwelshaikh006@gmail.com',
-            'password' => Hash::make('123456'),
-            'role' => 'admin',
-            'type' => 1,
-            'is_active' => true,
-            'phone' => '1234567890',
-            'address' => '123 Admin Lane',
-            'avatar' => 'error_testing_url.jpg', // Invalid URL to trigger fallback
-        ]);
+        $admin = User::updateOrCreate(
+            ['email' => 'tuwelshaikh006@gmail.com'],
+            [
+                'name' => 'Tuwel Shaikh',
+                'password' => Hash::make('123456'),
+                'role' => 'admin',
+                'type' => 1,
+                'is_active' => true,
+                'phone' => '1234567890',
+                'address' => '123 Admin Lane',
+                'avatar' => 'error_testing_url.jpg', // Invalid URL to trigger fallback
+            ]
+        );
 
         // 2. Create other beautiful meaningful users
         $names = [
@@ -38,17 +40,20 @@ class DatabaseSeeder extends Seeder
 
         $users = collect([$admin]);
         foreach ($names as $name) {
-            $users->push(User::create([
-                'name' => $name,
-                'email' => strtolower(explode(' ', $name)[0]) . '@example.com',
-                'password' => Hash::make('123456'),
-                'role' => 'user',
-                'type' => rand(1,2),
-                'is_active' => true,
-                'phone' => '0987654321',
-                'address' => 'Sample Address',
-                'avatar' => 'wrong_url.jpg', // Invalid URL to test fallback
-            ]));
+            $email = strtolower(explode(' ', $name)[0]) . '@example.com';
+            $users->push(User::updateOrCreate(
+                ['email' => $email],
+                [
+                    'name' => $name,
+                    'password' => Hash::make('123456'),
+                    'role' => 'user',
+                    'type' => rand(1,2),
+                    'is_active' => true,
+                    'phone' => '0987654321',
+                    'address' => 'Sample Address',
+                    'avatar' => 'wrong_url.jpg', // Invalid URL to test fallback
+                ]
+            ));
         }
 
         // 3. Call existing seeders
@@ -57,6 +62,7 @@ class DatabaseSeeder extends Seeder
             TaskTypeSeeder::class,
             TeamsSeeder::class,
             StageSeeder::class,
+            TaskSeeder::class,
         ]);
 
         // 4. Attach users to teams

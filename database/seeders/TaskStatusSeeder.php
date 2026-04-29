@@ -13,14 +13,17 @@ class TaskStatusSeeder extends Seeder
     public function run(): void
     {
         $statuses = [
-            ['name' => 'To Do', 'color' => '#64748b'],
-            ['name' => 'In Progress', 'color' => '#3b82f6'],
-            ['name' => 'Review', 'color' => '#f59e0b'],
-            ['name' => 'Done', 'color' => '#10b981'],
+            ['name' => 'To Do'],
+            ['name' => 'In Progress'],
+            ['name' => 'Review'],
+            ['name' => 'Done'],
         ];
 
         foreach ($statuses as $status) {
-            TaskStatus::create($status);
+            TaskStatus::updateOrCreate(
+                ['name' => $status['name']],
+                $status
+            );
         }
     }
 }

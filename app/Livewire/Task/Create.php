@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Task;
 
+use App\Constants\TaskPriority;
 use App\Events\TaskCreated;
 use App\Models\Stage;
 use App\Models\Task;
@@ -21,7 +22,8 @@ class Create extends Component
 
     public $task_type_id;
 
-    public $priority = 'Medium';
+    public $priority;
+    public $priorities;
 
     public $due_date;
 
@@ -41,7 +43,9 @@ class Create extends Component
     public function mount($teamId)
     {
         $this->team_id = $teamId;
-        $this->users = User::all();
+        $this->users = User::whereHas('teams', function ($query) {
+            $query->where('team_id', $this->team_id)->where('is_active', true)->where('type', 1);
+        })->get();
         $this->statuses = Stage::with('status')
             ->where('team_id', $this->team_id)
             ->orderBy('position')
@@ -50,9 +54,11 @@ class Create extends Component
             ->filter()
             ->values();
         $this->taskTypes = TaskType::where('is_active', true)->get();
+        $this->priorities = TaskPriority::all();
 
         $this->status_id = $this->statuses->first()->id ?? null;
         $this->task_type_id = $this->taskTypes->first()->id ?? null;
+        $this->priority = TaskPriority::MEDIUM;
         $this->due_date = now()->format('Y-m-d');
         $this->curr_team = Teams::where('id', $this->team_id)->first();
         // dd($this->curr_team->toJson(JSON_PRETTY_PRINT));
@@ -80,8 +86,8 @@ class Create extends Component
             'description' => $this->description,
             'task_status_id' => $this->status_id,
             'task_type_id' => $this->task_type_id,
-            'team_id' => $this->team_id,
             'priority' => $this->priority,
+            'team_id' => $this->team_id,
             'due_date' => $this->due_date,
             'assigned_to' => $this->assigned_to,
             'created_by' => auth()->id(),

@@ -178,8 +178,9 @@
                                     @if ($task->type)
                                         <span class="d-inline-flex align-items-center gap-1 badge"
                                             style="font-size:0.68rem;background:#ede9fe;color:#7c3aed;padding:0.3rem 0.6rem;border-radius:5px;">
-                                            <i class="{{ $task->type->icon ?? 'bi bi-bookmark' }}"
-                                                style="font-size:0.65rem;"></i>
+                                            <div style="width:12px;height:12px;display:inline-flex;align-items:center;">
+                                                {!! $task->type->icon !!}
+                                            </div>
                                             {{ $task->type->name }}
                                         </span>
                                     @else
@@ -399,9 +400,11 @@
                                                     style="font-size:0.65rem;color:#94a3b8;font-weight:700;letter-spacing:.03em;">{{ $taskKey }}</span>
                                                 @if ($task->type)
                                                     <span
-                                                        style="font-size:0.6rem;background:#ede9fe;color:#7c3aed;padding:0.1rem 0.4rem;border-radius:4px;font-weight:600;">
-                                                        <i class="{{ $task->type->icon ?? 'bi bi-bookmark' }}"
-                                                            style="font-size:0.55rem;"></i>
+                                                        style="font-size:0.6rem;background:#ede9fe;color:#7c3aed;padding:0.1rem 0.4rem;border-radius:4px;font-weight:600;display:inline-flex;align-items:center;gap:3px;">
+                                                        <div
+                                                            style="width:10px;height:10px;display:inline-flex;align-items:center;">
+                                                            {!! $task->type->icon !!}
+                                                        </div>
                                                         {{ $task->type->name }}
                                                     </span>
                                                 @endif
@@ -454,7 +457,7 @@
                                         <div class="d-flex align-items-center">
                                             {{-- Assignee --}}
                                             <div class="d-flex align-items-center gap-1"
-                                                title="Assignee: {{ $task->assignee->name ?? 'Unassigned' }}">
+                                                title="Assignee: {{ $task->assignee->name ?? 'Unassigned' }}{{ $task->assignee && $task->assignee->email ? ' (' . $task->assignee->email . ')' : '' }}">
                                                 <span
                                                     style="font-size:0.6rem;color:#94a3b8;letter-spacing:.03em;text-transform:uppercase;font-weight:600;">Asgn</span>
                                                 @if ($task->assignee)

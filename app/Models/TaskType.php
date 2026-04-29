@@ -13,5 +13,6 @@ class TaskType extends Model
         'description',
         'is_active',
         'icon',
+        'color',
     ];
 }

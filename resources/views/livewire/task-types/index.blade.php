@@ -31,7 +31,7 @@
                 <x-table.td>
                     <div class="bg-light rounded-3 d-flex align-items-center justify-content-center"
                         style="width: 36px; height: 36px;">
-                        <i class="bi {{ $type->icon ?? 'bi-tag-fill' }} text-primary"></i>
+                        {!! $type->icon !!}
                     </div>
                 </x-table.td>
                 <x-table.td>
