@@ -14,6 +14,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'workflow' => \App\Http\Middleware\CheckWorkflowTransition::class,
+            'agent' => \App\Http\Middleware\AgentMiddleware::class,
+            'client' => \App\Http\Middleware\ClientMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

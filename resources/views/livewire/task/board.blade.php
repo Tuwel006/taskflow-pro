@@ -415,7 +415,7 @@
                                         style="height:3px;background:{{ $stColor }};border-radius:8px 8px 0 0;opacity:.7;">
                                     </div>
 
-                                    <div style="padding:0.7rem 0.8rem 0.6rem;">
+                                    <div style="padding:0.5rem 0.75rem 0.4rem;">
 
                                         {{-- Row 1: task key + type badge + priority --}}
                                         <div class="d-flex align-items-center gap-1 mb-1 justify-content-between">
@@ -445,14 +445,6 @@
                                             style="font-size:0.8125rem;line-height:1.35;word-break:break-word;">
                                             {{ $task->title }}
                                         </a>
-
-                                        {{-- Row 3: Description snippet --}}
-                                        @if ($task->description)
-                                            <div class="text-muted mb-2"
-                                                style="font-size:0.72rem;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
-                                                {{ $task->description }}
-                                            </div>
-                                        @endif
 
                                         {{-- Divider --}}
                                         <div style="height:1px;background:#f1f5f9;margin:0.4rem 0;"></div>
@@ -499,16 +491,7 @@
                                             </div>
                                         </div>
 
-                                        {{-- Row 6: Project badge --}}
-                                        @if ($task->project)
-                                            <div class="mt-2 pt-1" style="border-top:1px solid #f1f5f9;">
-                                                <span class="d-inline-flex align-items-center gap-1"
-                                                    style="font-size:0.62rem;font-weight:600;background:#dbeafe;color:#1d4ed8;padding:0.15rem 0.5rem;border-radius:4px;">
-                                                    <i class="bi bi-people-fill" style="font-size:0.55rem;"></i>
-                                                    {{ $task->project->name }}
-                                                </span>
-                                            </div>
-                                        @endif
+                                        {{-- Row 6: Project badge removed --}}
 
                                     </div>{{-- end card body --}}
                                 </div>{{-- end .kb-card --}}

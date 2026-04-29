@@ -120,7 +120,7 @@
                                         <td class="px-4 py-3">
                                             <div class="d-flex align-items-center gap-3">
                                                 <div class="text-indigo-600 fw-bold bg-indigo-50 px-2 py-1 rounded" style="font-size: 0.7rem; font-family: 'JetBrains Mono', monospace;">
-                                                    {{ $task->project->prefix }}-{{ $task->task_number }}
+                                                    {{ $task->display_id }}
                                                 </div>
                                                 <div class="fw-semibold text-slate-800 text-truncate" style="font-size: 0.8125rem; max-width: 250px;">{{ $task->title }}</div>
                                             </div>

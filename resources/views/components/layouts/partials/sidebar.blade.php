@@ -166,7 +166,8 @@
             <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
             Overview
         </a>
-        <a href="/projects" wire:navigate class="nav-link">
+        
+        <a href="/projects" wire:navigate class="nav-link {{ request()->is('projects*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-folder2"></i></span>
             Projects
         </a>

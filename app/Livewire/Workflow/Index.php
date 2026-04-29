@@ -83,6 +83,12 @@ class Index extends Component
 
         if ($this->editingStageId) {
             $stage = Stage::findOrFail($this->editingStageId);
+            $oldPosition = $stage->position;
+            $newPositionStage = Stage::where('project_id', $this->selectedProjectId)->where('position', $this->stagePosition)->first();
+            if($newPositionStage){
+                $newPositionStage->position = $oldPosition;
+                $newPositionStage->save();
+            }
             $stage->update([
                 'status_id' => $this->stageStatusId,
                 'position' => $this->stagePosition,
