@@ -63,8 +63,9 @@
 
         <x-slot name="columns">
             <x-table.th>No</x-table.th>
-            <x-table.th>Name</x-table.th>
+            <x-table.th>Project Name</x-table.th>
             <x-table.th>Prefix</x-table.th>
+            <x-table.th>Description</x-table.th>
             <x-table.th>Status</x-table.th>
             <x-table.th align="end"></x-table.th>
         </x-slot>
@@ -72,37 +73,30 @@
         @foreach ($projects as $project)
             <x-table.row wire:key="project-{{ $project->id }}">
                 <x-table.td>
-                    <div class="d-flex align-items-center gap-3">
-                        <div>
-                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $project->id }}</div>
-                        </div>
-                    </div>
+                    <span class="text-muted fw-semibold" style="font-size: 0.8125rem;">#{{ $project->id }}</span>
                 </x-table.td>
                 <x-table.td>
-                    <div class="d-flex align-items-center gap-3">
-                        <div>
-                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $project->name }}</div>
-                        </div>
-                    </div>
+                    <div class="fw-bold text-dark" style="font-size: 0.8125rem;">{{ $project->name }}</div>
                 </x-table.td>
 
                 <x-table.td>
-                    <div class="d-flex flex-column">
-                        <span class="fw-bold text-dark"
-                            style="font-size: 0.875rem;">{{ $project->prefix ?? 'N/A' }}</span>
+                    <span class="badge bg-light text-primary border" style="font-size: 0.75rem; font-family: monospace;">{{ $project->prefix }}</span>
+                </x-table.td>
+
+                <x-table.td>
+                    <div class="text-muted text-truncate" style="font-size: 0.75rem; max-width: 250px;" title="{{ $project->description }}">
+                        {{ $project->description ?? 'No description provided.' }}
                     </div>
                 </x-table.td>
 
                 <x-table.td>
                     @if ($project->is_active)
-                        <span class="badge bg-success-subtle text-success border border-success-subtle"
-                            style="font-size: 0.65rem; font-weight: 600; padding: 0.35em 0.65em;">
-                            <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Active
+                        <span class="badge" style="font-size: 0.65rem; background: #ecfdf5; color: #059669; border: 1px solid #d1fae5;">
+                            Active
                         </span>
                     @else
-                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle"
-                            style="font-size: 0.65rem; font-weight: 600; padding: 0.35em 0.65em;">
-                            <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Inactive
+                        <span class="badge" style="font-size: 0.65rem; background: #f1f5f9; color: #64748b; border: 1px solid #e2e8f0;">
+                            Inactive
                         </span>
                     @endif
                 </x-table.td>
@@ -114,6 +108,11 @@
                             title="Edit">
                             <i class="bi bi-pencil"></i>
                         </a>
+                        <button wire:click="delete({{ $project->id }})" 
+                            wire:confirm="Are you sure you want to delete this project? This action cannot be undone."
+                            class="btn btn-sm btn-outline-danger border-0" style="font-size: 0.75rem;" title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
                         <button class="btn btn-sm btn-outline-secondary border-0" style="font-size: 0.75rem;"
                             title="More">
                             <i class="bi bi-three-dots-vertical"></i>

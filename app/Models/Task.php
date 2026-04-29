@@ -17,11 +17,28 @@ class Task extends Model
         'task_status_id',
         'task_type_id',
         'project_id',
+        'task_number',
         'priority',
         'due_date',
         'assigned_to',
         'created_by',
     ];
+
+    protected static function booted()
+    {
+        static::creating(function ($task) {
+            if (!$task->task_number && $task->project_id) {
+                $maxNumber = static::where('project_id', $task->project_id)->max('task_number') ?? 0;
+                $task->task_number = $maxNumber + 1;
+            }
+        });
+    }
+
+    public function getDisplayIdAttribute()
+    {
+        $prefix = $this->project ? $this->project->prefix : 'TASK';
+        return "{$prefix}-{$this->task_number}";
+    }
 
     public function type()
     {

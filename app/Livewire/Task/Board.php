@@ -27,10 +27,21 @@ class Board extends Component
 
     public function mount()
     {
-        $firstProject = Project::where('is_active', true)->first();
-        if ($firstProject) {
-            $this->selectedProject = $firstProject->id;
+        $this->selectedProject = session('selected_project_id', '');
+
+        if (!$this->selectedProject || !Project::where('id', $this->selectedProject)->exists()) {
+            $firstProject = Project::where('is_active', true)->first();
+            if ($firstProject) {
+                $this->selectedProject = (string)$firstProject->id;
+                session(['selected_project_id' => $this->selectedProject]);
+            }
         }
+    }
+
+    public function updatedSelectedProject($value)
+    {
+        session(['selected_project_id' => $value]);
+        $this->resetPage();
     }
 
     public function updatingSearch()
@@ -48,10 +59,7 @@ class Board extends Component
         $this->resetPage();
     }
 
-    public function updatingSelectedProject()
-    {
-        $this->resetPage();
-    }
+
 
     protected $listeners = [
         'taskMoved' => 'updateStatus',

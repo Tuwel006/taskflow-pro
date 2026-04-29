@@ -12,7 +12,7 @@ class Index extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    public $status = true;
+    public $status = '1';
 
     public $search;
 
@@ -20,10 +20,22 @@ class Index extends Component
 
     public function render()
     {
-        $projects = Project::where('is_active', $this->status)
+        $projects = Project::when($this->status !== '2', function($query) {
+                $query->where('is_active', (bool)$this->status);
+            })
             ->where('name', 'like', "%{$this->search}%")
             ->paginate($this->itemPerPage);
 
         return view('livewire.projects.index', compact('projects'));
+    }
+
+    public function delete($id)
+    {
+        $project = Project::findOrFail($id);
+        
+        // Prevent deletion if project has tasks? Maybe just delete.
+        $project->delete();
+        
+        $this->dispatch('toast', ['message' => 'Project deleted successfully.', 'type' => 'success']);
     }
 }

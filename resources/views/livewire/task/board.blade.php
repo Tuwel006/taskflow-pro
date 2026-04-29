@@ -157,7 +157,7 @@
                                 class="task-list-row">
                                 {{-- ID --}}
                                 <td style="padding:0.75rem 1rem;color:#64748b;font-weight:700;font-size:0.75rem;">
-                                    #{{ $task->id }}
+                                    {{ $task->display_id }}
                                 </td>
                                 {{-- Task Title + description snippet --}}
                                 <td style="padding:0.75rem 1rem;max-width:260px;">
@@ -317,27 +317,27 @@
     @else
         <div class="kanban-root" x-data="{
             initSortable() {
-                const columns = document.querySelectorAll('.kanban-drop-zone');
-                columns.forEach(col => {
-                    if (col._sortableInstance) col._sortableInstance.destroy();
-                    col._sortableInstance = new Sortable(col, {
-                        group: 'kb-tasks',
-                        animation: 200,
-                        ghostClass: 'kb-ghost',
-                        dragClass: 'kb-dragging',
-                        forceFallback: false,
-                        onEnd: (evt) => {
-                            const taskId = evt.item.dataset.id;
-                            const newStageId = evt.to.dataset.stageId;
-                            if (evt.from !== evt.to) {
-                                $wire.updateStatus(taskId, newStageId);
+                setTimeout(() => {
+                    document.querySelectorAll('.kanban-drop-zone').forEach(col => {
+                        if (col._sortableInstance) col._sortableInstance.destroy();
+                        col._sortableInstance = new Sortable(col, {
+                            group: 'kb-tasks',
+                            animation: 200,
+                            ghostClass: 'kb-ghost',
+                            dragClass: 'kb-dragging',
+                            onEnd: (evt) => {
+                                const taskId = evt.item.dataset.id;
+                                const newStageId = evt.to.dataset.stageId;
+                                if (evt.from !== evt.to) {
+                                    $wire.updateStatus(taskId, newStageId);
+                                }
                             }
-                        }
+                        });
                     });
-                });
+                }, 50);
             }
         }" x-init="initSortable()"
-            @taskUpdated.window="$nextTick(() => initSortable())">
+            @taskUpdated.window="initSortable()">
 
             <div class="kanban-scroll-wrapper d-flex gap-2 pb-4"
                 style="overflow-x:auto;align-items:flex-start;padding:0.25rem 0 1rem;min-height:calc(100vh - 260px);">
@@ -403,8 +403,7 @@
                                     ];
                                     $sColor = $task->statusRecord->color ?? $stColor;
                                     $isOverdue = $task->due_date && \Carbon\Carbon::parse($task->due_date)->isPast();
-                                    $projectPrefix = $task->project->prefix ?? 'TF';
-                                    $taskKey = strtoupper($projectPrefix) . '-' . $task->id;
+                                    $taskKey = $task->display_id;
                                 @endphp
 
                                 <div class="kb-card bg-white rounded shadow-sm"

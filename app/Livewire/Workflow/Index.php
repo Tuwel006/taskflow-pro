@@ -30,9 +30,14 @@ class Index extends Component
 
     public function mount()
     {
-        $firstProject = Project::where('is_active', true)->first();
-        if ($firstProject) {
-            $this->selectedProjectId = $firstProject->id;
+        $this->selectedProjectId = session('selected_project_id', '');
+
+        if (!$this->selectedProjectId || !Project::where('id', $this->selectedProjectId)->exists()) {
+            $firstProject = Project::where('is_active', true)->first();
+            if ($firstProject) {
+                $this->selectedProjectId = $firstProject->id;
+                session(['selected_project_id' => $this->selectedProjectId]);
+            }
         }
     }
 
@@ -95,8 +100,9 @@ class Index extends Component
         $this->resetStageForm();
     }
 
-    public function updatedSelectedProjectId()
+    public function updatedSelectedProjectId($value)
     {
+        session(['selected_project_id' => $value]);
         $this->resetStageForm();
         $this->fromStatusId = null;
         $this->toStatusId = null;

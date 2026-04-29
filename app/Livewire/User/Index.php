@@ -16,6 +16,11 @@ class Index extends Component
     public $search = '';
     public $selectedProjectId = '';
 
+    public function mount()
+    {
+        $this->selectedProjectId = session('selected_project_id', '');
+    }
+
     public function updatingItemPerPage()
     {
         $this->resetPage();
@@ -26,8 +31,9 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function updatingSelectedProjectId()
+    public function updatedSelectedProjectId($value)
     {
+        session(['selected_project_id' => $value]);
         $this->resetPage();
     }
 

@@ -166,7 +166,7 @@
             <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
             Overview
         </a>
-        <a href="#" wire:navigate class="nav-link">
+        <a href="/projects" wire:navigate class="nav-link">
             <span class="nav-icon"><i class="bi bi-folder2"></i></span>
             Projects
         </a>
@@ -182,10 +182,6 @@
             <span class="nav-icon"><i class="bi bi-calendar4-event"></i></span>
             Schedule
         </a>
-        <a href="/projects" wire:navigate class="nav-link {{ request()->is('projects*') ? 'active' : '' }}">
-            <span class="nav-icon"><i class="bi bi-chat-left-text"></i></span>
-            Projects
-        </a>
         <a href="/task-statuses" wire:navigate class="nav-link {{ request()->is('task-statuses*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-list-check"></i></span>
             Task Statuses
@@ -196,7 +192,7 @@
         </a>
         <a href="/tasks" wire:navigate class="nav-link {{ request()->is('tasks*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>
-             Tasks
+            Tasks
             @php
                 $projectTaskCount = \App\Models\Task::whereHas('statusRecord', function ($q) {
                     $q->where('name', '!=', 'Completed');
