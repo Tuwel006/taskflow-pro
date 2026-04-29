@@ -5,6 +5,12 @@
 # We must create the 'cache' table BEFORE we run optimize:clear, or it will crash trying to clear a non-existent table!
 php artisan migrate --force
 
+# Automatically run the Database Seeder ONLY if explicitly requested via Environment Variable (avoids crashes on reboot)
+if [ "$RUN_SEEDER" = "true" ]; then
+    echo "Running Initial Database Seeder..."
+    php artisan db:seed --force
+fi
+
 # Now that the tables exist, safely run the cache optimizations
 php artisan optimize:clear
 php artisan config:cache
