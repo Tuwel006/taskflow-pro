@@ -70,6 +70,6 @@ class Edit extends Component
 
         session()->flash('message', 'Workflow stage updated successfully');
 
-        return $this->redirect('/stages', navigate: true);
+        return $this->redirect('/workflows', navigate: true);
     }
 }

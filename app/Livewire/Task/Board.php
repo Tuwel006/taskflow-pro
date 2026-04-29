@@ -120,6 +120,16 @@ class Board extends Component
         }
 
         $task = Task::findOrFail($taskId);
+
+        // Check if transition is allowed by workflow
+        if (!$task->canTransitionTo($stage->status_id)) {
+            $this->dispatch('notification', [
+                'type'    => 'warning',
+                'message' => 'Transition from ' . ($task->statusRecord->name ?? 'current status') . ' to ' . ($stage->status->name ?? 'new status') . ' is not allowed for this team.',
+            ]);
+            return;
+        }
+
         $task->update(['task_status_id' => $stage->status_id]);
 
         $this->dispatch('notification', [

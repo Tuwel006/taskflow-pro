@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Workflow;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -45,5 +46,17 @@ class Task extends Model
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function canTransitionTo($newStatusId)
+    {
+        if ($this->task_status_id == $newStatusId) {
+            return true;
+        }
+
+        return Workflow::where('team_id', $this->team_id)
+            ->where('from_status_id', $this->task_status_id)
+            ->where('to_status_id', $newStatusId)
+            ->exists();
     }
 }

@@ -3,12 +3,12 @@
 # Automatically run database migrations FIRST.
 # Extremely important: Laravel 11 uses the database for Cache and Sessions by default.
 # We must create the 'cache' table BEFORE we run optimize:clear, or it will crash trying to clear a non-existent table!
-php artisan migrate --force
-
-# Automatically run the Database Seeder ONLY if explicitly requested via Environment Variable (avoids crashes on reboot)
 if [ "$RUN_SEEDER" = "true" ]; then
-    echo "Running Initial Database Seeder..."
-    php artisan db:seed --force
+    echo "Running Fresh Migration and Seeding..."
+    php artisan migrate:fresh --seed --force
+else
+    echo "Running Standard Migration..."
+    php artisan migrate --force
 fi
 
 # Now that the tables exist, safely run the cache optimizations

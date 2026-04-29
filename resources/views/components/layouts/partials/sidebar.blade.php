@@ -190,9 +190,9 @@
             <span class="nav-icon"><i class="bi bi-list-check"></i></span>
             Task Statuses
         </a>
-        <a href="/stages" wire:navigate class="nav-link {{ request()->is('stages*') ? 'active' : '' }}">
+        <a href="/workflows" wire:navigate class="nav-link {{ request()->is('workflows*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-diagram-3"></i></span>
-            Workflow Stages
+            Workflows
         </a>
         <a href="/tasks" wire:navigate class="nav-link {{ request()->is('tasks*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>

@@ -63,6 +63,7 @@ class DatabaseSeeder extends Seeder
             TeamsSeeder::class,
             StageSeeder::class,
             TaskSeeder::class,
+            WorkflowSeeder::class,
         ]);
 
         // 4. Attach users to teams

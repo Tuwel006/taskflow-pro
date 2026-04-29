@@ -44,9 +44,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/task-statuses', TaskStatusIndex::class)->name('task-statuses');
     Route::get('/task-statuses/create', TaskStatusCreate::class)->name('task-statuses.create');
     Route::get('/task-statuses/{id}/edit', TaskStatusEdit::class)->name('task-statuses.edit');
-    Route::get('/stages', StageIndex::class)->name('stages');
     Route::get('/stages/create', StageCreate::class)->name('stages.create');
     Route::get('/stages/{id}/edit', StageEdit::class)->name('stages.edit');
+    Route::get('/workflows', \App\Livewire\Workflow\Index::class)->name('workflows');
 });
 
 // Route::middleware(['guest'])->group(function () {

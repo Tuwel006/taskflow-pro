@@ -5,7 +5,7 @@
         :breadcrumbItems="[['label' => 'Workflow Stages', 'url' => '/stages'], ['label' => 'Edit']]"
     >
         <x-slot name="actions">
-            <a href="/stages" wire:navigate class="btn btn-sm btn-outline-secondary px-3 shadow-sm d-flex align-items-center" style="font-weight: 600; border-radius: 6px;">
+            <a href="/workflows" wire:navigate class="btn btn-sm btn-outline-secondary px-3 shadow-sm d-flex align-items-center" style="font-weight: 600; border-radius: 6px;">
                 <i class="bi bi-arrow-left me-2"></i> Back to List
             </a>
         </x-slot>

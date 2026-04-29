@@ -58,6 +58,6 @@ class Create extends Component
 
         session()->flash('success', 'Workflow stage created successfully');
 
-        return $this->redirect('/stages', navigate: true);
+        return $this->redirect('/workflows', navigate: true);
     }
 }
