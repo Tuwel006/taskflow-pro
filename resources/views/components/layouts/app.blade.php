@@ -66,7 +66,7 @@
     </style>
 </head>
 
-<body>
+<body x-data="{ mobileSidebarOpen: false }">
 
     <div id="app-wrapper">
 

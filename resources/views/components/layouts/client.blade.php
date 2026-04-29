@@ -38,7 +38,7 @@
     </style>
 </head>
 
-<body>
+<body x-data="{ mobileSidebarOpen: false }">
     <div id="app-wrapper">
         {{-- Dedicated Client Sidebar --}}
         @include('components.layouts.partials.client-sidebar')

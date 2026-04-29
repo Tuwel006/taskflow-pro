@@ -115,18 +115,25 @@
 </style>
 
 <nav id="main-navbar">
-    <div class="d-flex align-items-center gap-3">
+    <div class="d-flex align-items-center gap-2 gap-md-3">
+        {{-- Mobile Toggle --}}
+        <button class="nav-btn-icon d-md-none border-0" @click="mobileSidebarOpen = true">
+            <i class="bi bi-list fs-4"></i>
+        </button>
+
         <h1 class="navbar-title">
-            @if(request()->is('dashboard'))
+            @if(request()->is('dashboard') || request()->is('client/dashboard'))
                 Overview
-            @elseif(request()->is('tasks*'))
+            @elseif(request()->is('tasks*') || request()->is('client/tasks*'))
                 Tasks Console
+            @elseif(request()->is('projects*') || request()->is('client/projects*'))
+                Projects
             @else
                 Application
             @endif
         </h1>
         
-        <div class="nav-search-group d-none d-md-block">
+        <div class="nav-search-group d-none d-lg-block">
             <i class="bi bi-search nav-search-icon"></i>
             <input type="text" class="nav-search-input" placeholder="Quick search...">
         </div>
