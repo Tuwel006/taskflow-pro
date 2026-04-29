@@ -26,7 +26,7 @@ class Index extends Component
 
     public function render()
     {
-        $users = User::where(function($query) {
+        $users = User::with(['teams'])->where(function($query) {
             $query->where('name', 'like', '%' . $this->search . '%')
                 ->orWhere('email', 'like', '%' . $this->search . '%')
                 ->orWhere('phone', 'like', '%' . $this->search . '%');
