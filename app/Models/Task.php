@@ -24,6 +24,10 @@ class Task extends Model
         'created_by',
     ];
 
+    protected $casts = [
+        'due_date' => 'date',
+    ];
+
     protected static function booted()
     {
         static::creating(function ($task) {

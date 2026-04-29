@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\Client;
 
 use App\Models\User;
 use Livewire\Component;
@@ -8,26 +8,18 @@ use Livewire\Component;
 class Create extends Component
 {
     public $name;
-
     public $email;
-
     public $phone;
-
     public $address;
-
-    public $role;
-
-    public $type = 1;
-
+    public $role = 'Client';
+    public $type = 2;
     public $password;
-
     public $avatar;
-
     public $is_active = true;
 
     public function render()
     {
-        return view('livewire.user.create');
+        return view('livewire.client.create');
     }
 
     public function store()
@@ -42,15 +34,12 @@ class Create extends Component
             'avatar' => 'nullable|url',
             'is_active' => 'boolean',
         ]);
-        $validated['type'] = 1;
 
+        $validated['type'] = 2;
         User::create($validated);
 
-        // Fire the custom 'published' event
-        $this->fireModelEvent('status_changed', false);
+        session()->flash('success', 'Client created successfully');
 
-        session()->flash('success', 'User created successfully');
-
-        return $this->redirect('/users', navigate: true);
+        return $this->redirect('/clients', navigate: true);
     }
 }

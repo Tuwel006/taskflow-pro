@@ -38,8 +38,8 @@
                             <div class="spinner-border spinner-border-sm text-primary" role="status" wire:loading
                                 wire:target="search"></div>
                         </span>
-                        <input wire:model.live.debounce.500ms="search" type="text" style="border: none"
-                            class="form-control no-border-input" placeholder="Search by name...">
+                        <input wire:model.live.debounce.500ms="search" type="text"
+                            class="form-control border-start-0" placeholder="Search by name...">
                     </div>
                 </div>
                 <div class="col-md-auto ms-auto d-flex gap-2 align-items-center">

@@ -14,7 +14,7 @@
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <label class="fw-bold text-muted text-uppercase mb-0" style="font-size: 0.6rem; letter-spacing: 0.5px;">Project</label>
-                    <select wire:model.live="selectedProjectId" class="form-select form-select-sm border-0 bg-light shadow-none fw-semibold text-dark py-1" style="min-width: 150px; border-radius: 6px; font-size: 0.75rem;">
+                    <select wire:model.live="selectedProjectId" class="form-select form-select-sm fw-semibold text-dark py-1" style="min-width: 150px; border-radius: 6px; font-size: 0.75rem;">
                         @foreach($projects as $project)
                             <option value="{{ $project->id }}">{{ $project->name }}</option>
                         @endforeach
@@ -294,8 +294,7 @@
             border-color: #e2e8f0;
         }
         .compact-select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+            /* Handled by global styles */
         }
         .dot { display: inline-block; }
     </style>

@@ -19,7 +19,7 @@
         <div class="d-flex align-items-center gap-2 me-1">
             <i class="bi bi-people-fill text-muted" style="font-size:0.85rem;"></i>
             <select wire:model.live="selectedProject" class="form-select form-select-sm"
-                style="min-width:180px;font-size:0.8125rem;font-weight:600;border:1.5px solid #e2e8f0;color:#0f172a;background:#f8fafc;border-radius:6px;">
+                style="min-width:180px;font-size:0.8125rem;font-weight:600;color:#0f172a;background:#f8fafc;">
                 @foreach ($projects as $project)
                     <option value="{{ $project->id }}" @selected($selectedProject == $project->id)>
                         {{ $project->name }}
@@ -49,21 +49,21 @@
         {{-- Search --}}
         <div class="input-group input-group-sm" style="max-width:210px;">
             <span class="input-group-text bg-white border-end-0 text-muted"
-                style="border:1px solid #e2e8f0;font-size:0.8rem;"><i class="bi bi-search"></i></span>
+                style="font-size:0.8rem;"><i class="bi bi-search"></i></span>
             <input wire:model.live.debounce.400ms="search" type="text" class="form-control border-start-0"
-                style="border:1px solid #e2e8f0;font-size:0.8rem;" placeholder="Search tasks…">
+                style="font-size:0.8rem;" placeholder="Search tasks…">
         </div>
 
         @if ($viewMode === 'list')
             <select wire:model.live="status" class="form-select form-select-sm"
-                style="max-width:120px;font-size:0.8rem;border:1px solid #e2e8f0;">
+                style="max-width:120px;font-size:0.8rem;">
                 <option value="">All Status</option>
                 @foreach (\App\Models\TaskStatus::all() as $s)
                     <option>{{ $s->name }}</option>
                 @endforeach
             </select>
             <select wire:model.live="priority" class="form-select form-select-sm"
-                style="max-width:110px;font-size:0.8rem;border:1px solid #e2e8f0;">
+                style="max-width:110px;font-size:0.8rem;">
                 <option value="">Priority</option>
                 <option>Urgent</option>
                 <option>High</option>
@@ -441,10 +441,10 @@
                                         </div>
 
                                         {{-- Row 2: Title --}}
-                                        <div class="fw-semibold text-dark mb-2"
+                                        <a href="/tasks/{{ $task->id }}/edit" wire:navigate class="fw-semibold text-dark mb-2 d-block text-decoration-none hover-primary"
                                             style="font-size:0.8125rem;line-height:1.35;word-break:break-word;">
                                             {{ $task->title }}
-                                        </div>
+                                        </a>
 
                                         {{-- Row 3: Description snippet --}}
                                         @if ($task->description)
@@ -535,6 +535,11 @@
             box-shadow: 0 4px 18px rgba(79, 70, 229, .13) !important;
             transform: translateY(-2px);
             border-color: #c7d2fe !important;
+        }
+
+        .hover-primary:hover {
+            color: #4f46e5 !important;
+            text-decoration: underline !important;
         }
 
         .kb-ghost {

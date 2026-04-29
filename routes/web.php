@@ -35,12 +35,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/users', UserIndex::class)->name('users');
     Route::get('/users/create', UserCreate::class)->name('users.create');
     Route::get('/users/{id}/edit', UserEdit::class)->name('users.edit');
+
+    Route::get('/clients', \App\Livewire\Client\Index::class)->name('clients');
+    Route::get('/clients/create', \App\Livewire\Client\Create::class)->name('clients.create');
+    Route::get('/clients/{id}/edit', \App\Livewire\Client\Edit::class)->name('clients.edit');
     Route::post('/logout', function () {
         Auth::logout();
 
         return redirect()->route('login');
     })->name('logout');
     Route::get('/tasks/create/project/{projectId}', TaskCreate::class)->name('tasks.create');
+    Route::get('/tasks/{task}/edit', \App\Livewire\Task\Edit::class)->name('tasks.edit');
     Route::get('/task-types', TaskTypeIndex::class)->name('task-types');
     Route::get('/projects', ProjectIndex::class)->name('projects');
     Route::get('/projects/create', ProjectCreate::class)->name('projects.create');

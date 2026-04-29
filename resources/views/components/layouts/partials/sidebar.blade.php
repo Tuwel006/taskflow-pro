@@ -178,6 +178,10 @@
             <span class="nav-icon"><i class="bi bi-people"></i></span>
             Users
         </a>
+        <a href="/clients" wire:navigate class="nav-link {{ request()->is('clients*') ? 'active' : '' }}">
+            <span class="nav-icon"><i class="bi bi-building"></i></span>
+            Clients
+        </a>
         <a href="#" wire:navigate class="nav-link">
             <span class="nav-icon"><i class="bi bi-calendar4-event"></i></span>
             Schedule

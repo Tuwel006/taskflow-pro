@@ -55,7 +55,7 @@ class Edit extends Component
         $user->phone = $this->phone;
         $user->address = $this->address;
         $user->role = $this->role;
-        $user->type = $this->type;
+        $user->type = 1;
         $user->avatar = $this->avatar;
         $user->is_active = $this->is_active;
         if ($this->password) {

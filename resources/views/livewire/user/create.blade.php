@@ -49,22 +49,11 @@
                         <h6 class="fw-bold mb-3" style="font-size: 0.875rem; color: #1e293b; border-left: 3px solid #3b82f6; padding-left: 10px;">System Configuration</h6>
 
                         <div class="row g-3">
-                            <div class="col-sm-6">
+                            <div class="col-sm-12">
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" style="font-size: 0.75rem; color: #64748b;">System Role</label>
                                     <input type="text" wire:model.blur="role" name="role" class="form-control" placeholder="e.g. admin, manager, user" style="font-size: 0.8125rem; border-radius: 6px;">
                                     @error('role') <span class="text-danger">{{ $message }}</span> @enderror
-                                </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="mb-3">
-                                    <label class="form-label fw-semibold" style="font-size: 0.75rem; color: #64748b;">User Type</label>
-                                    <select class="form-select" style="font-size: 0.8125rem; border-radius: 6px;" wire:model.blur="type" name="type">
-                                        <option value="0">0 (Default)</option>
-                                        <option value="1">1 (Agent)</option>
-                                        <option value="2">2 (Client)</option>
-                                    </select>
-                                    @error('type') <span class="text-danger">{{ $message }}</span> @enderror
                                 </div>
                             </div>
                         </div>

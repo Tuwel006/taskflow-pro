@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\User;
+namespace App\Livewire\Client;
 
 use Livewire\Component;
 use App\Models\User;
@@ -40,8 +40,8 @@ class Index extends Component
     public function render()
     {
         $projects = Project::where('is_active', true)->get();
-        $users = User::with(['projects'])
-            ->where('type', 1)
+        $clients = User::with(['projects'])
+            ->where('type', 2)
             ->when($this->selectedProjectId, function($query) {
                 $query->whereHas('projects', function($q) {
                     $q->where('projects.id', $this->selectedProjectId);
@@ -52,13 +52,13 @@ class Index extends Component
                     ->orWhere('email', 'like', '%' . $this->search . '%')
                     ->orWhere('phone', 'like', '%' . $this->search . '%');
             })->paginate($this->itemPerPage);
-        return view('livewire.user.index', compact('users', 'projects'));
+        return view('livewire.client.index', compact('clients', 'projects'));
     }
 
     public function delete($id)
     {
-        $user = User::find($id);
-        $user->delete();
-        session()->flash('message', 'User deleted successfully');
+        $client = User::find($id);
+        $client->delete();
+        session()->flash('message', 'Client deleted successfully');
     }
 }
