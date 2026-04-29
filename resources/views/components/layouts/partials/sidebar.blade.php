@@ -182,9 +182,9 @@
             <span class="nav-icon"><i class="bi bi-calendar4-event"></i></span>
             Schedule
         </a>
-        <a href="/teams" wire:navigate class="nav-link {{ request()->is('teams*') ? 'active' : '' }}">
+        <a href="/projects" wire:navigate class="nav-link {{ request()->is('projects*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-chat-left-text"></i></span>
-            Teams
+            Projects
         </a>
         <a href="/task-statuses" wire:navigate class="nav-link {{ request()->is('task-statuses*') ? 'active' : '' }}">
             <span class="nav-icon"><i class="bi bi-list-check"></i></span>
@@ -198,12 +198,12 @@
             <span class="nav-icon"><i class="bi bi-grid-1x2"></i></span>
              Tasks
             @php
-                $teamTaskCount = \App\Models\Task::whereHas('statusRecord', function ($q) {
+                $projectTaskCount = \App\Models\Task::whereHas('statusRecord', function ($q) {
                     $q->where('name', '!=', 'Completed');
                 })->count();
             @endphp
-            @if ($teamTaskCount > 0)
-                <span class="nav-badge">{{ str_pad($teamTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
+            @if ($projectTaskCount > 0)
+                <span class="nav-badge">{{ str_pad($projectTaskCount, 2, '0', STR_PAD_LEFT) }}</span>
             @endif
         </a>
         <a href="/task-types" wire:navigate class="nav-link {{ request()->is('task-types*') ? 'active' : '' }}">

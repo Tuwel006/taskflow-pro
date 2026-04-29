@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Livewire\Teams;
+namespace App\Livewire\Projects;
 
-use App\Models\Teams;
+use App\Models\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -20,10 +20,10 @@ class Index extends Component
 
     public function render()
     {
-        $teams = Teams::where('is_active', $this->status)
+        $projects = Project::where('is_active', $this->status)
             ->where('name', 'like', "%{$this->search}%")
             ->paginate($this->itemPerPage);
 
-        return view('livewire.teams.index', compact('teams'));
+        return view('livewire.projects.index', compact('projects'));
     }
 }

@@ -5,7 +5,7 @@ namespace App\Livewire\Task;
 use App\Models\Stage;
 use App\Models\Task;
 use App\Models\TaskStatus;
-use App\Models\Teams;
+use App\Models\Project;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -21,15 +21,15 @@ class Board extends Component
 
     public $priority = '';
 
-    public $selectedTeam = '';
+    public $selectedProject = '';
 
     public $viewMode = 'kanban'; // 'list' or 'kanban'
 
     public function mount()
     {
-        $firstTeam = Teams::where('is_active', true)->first();
-        if ($firstTeam) {
-            $this->selectedTeam = $firstTeam->id;
+        $firstProject = Project::where('is_active', true)->first();
+        if ($firstProject) {
+            $this->selectedProject = $firstProject->id;
         }
     }
 
@@ -48,7 +48,7 @@ class Board extends Component
         $this->resetPage();
     }
 
-    public function updatingSelectedTeam()
+    public function updatingSelectedProject()
     {
         $this->resetPage();
     }
@@ -64,12 +64,12 @@ class Board extends Component
 
     public function render()
     {
-        $teams = Teams::where('is_active', true)->get();
+        $projects = Project::where('is_active', true)->get();
 
         if ($this->viewMode === 'list') {
-            $tasks = Task::with(['assignee', 'creator', 'statusRecord', 'team', 'type'])
-                ->when($this->selectedTeam, function ($query) {
-                    $query->where('team_id', $this->selectedTeam);
+            $tasks = Task::with(['assignee', 'creator', 'statusRecord', 'project', 'type'])
+                ->when($this->selectedProject, function ($query) {
+                    $query->where('project_id', $this->selectedProject);
                 })
                 ->when($this->search, function ($query) {
                     $query->where(function ($q) {
@@ -88,16 +88,16 @@ class Board extends Component
                 ->latest()
                 ->paginate(10);
 
-            return view('livewire.task.board', compact('tasks', 'teams'));
+            return view('livewire.task.board', compact('tasks', 'projects'));
         }
 
         // Kanban Mode
-        $stages = Stage::where('team_id', $this->selectedTeam)
+        $stages = Stage::where('project_id', $this->selectedProject)
             ->with(['status', 'tasks' => function ($query) {
-                $query->when($this->selectedTeam, function ($q) {
-                    $q->where('team_id', $this->selectedTeam);
+                $query->when($this->selectedProject, function ($q) {
+                    $q->where('project_id', $this->selectedProject);
                 })
-                ->with(['assignee', 'creator', 'team', 'type', 'statusRecord'])
+                ->with(['assignee', 'creator', 'project', 'type', 'statusRecord'])
                 ->when($this->search, function ($q) {
                     $q->where(function ($sq) {
                         $sq->where('title', 'like', '%'.$this->search.'%')
@@ -107,7 +107,7 @@ class Board extends Component
                 ->orderBy('created_at', 'desc');
             }])->orderBy('position')->get();
 
-        return view('livewire.task.board', compact('stages', 'teams'));
+        return view('livewire.task.board', compact('stages', 'projects'));
     }
 
     public function changeStatus($taskId, $statusId)

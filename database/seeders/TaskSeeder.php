@@ -6,7 +6,7 @@ use App\Constants\TaskPriority;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\TaskType;
-use App\Models\Teams;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -18,12 +18,12 @@ class TaskSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
-        $teams = Teams::all();
+        $projects = Project::all();
         $statuses = TaskStatus::all();
         $types = TaskType::all();
         $priorities = [TaskPriority::LOW, TaskPriority::MEDIUM, TaskPriority::HIGH, TaskPriority::URGENT];
 
-        if ($users->isEmpty() || $teams->isEmpty() || $statuses->isEmpty() || $types->isEmpty()) {
+        if ($users->isEmpty() || $projects->isEmpty() || $statuses->isEmpty() || $types->isEmpty()) {
             return;
         }
 
@@ -55,7 +55,7 @@ class TaskSeeder extends Seeder
                 'task_status_id' => $statuses->random()->id,
                 'task_type_id' => $types->random()->id,
                 'priority' => $priorities[array_rand($priorities)],
-                'team_id' => $teams->random()->id,
+                'project_id' => $projects->random()->id,
                 'assigned_to' => $users->random()->id,
                 'created_by' => $users->first()->id,
                 'due_date' => now()->addDays(rand(1, 10)),

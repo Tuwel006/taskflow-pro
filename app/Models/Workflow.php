@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Workflow extends Model
 {
-    protected $fillable = ['team_id', 'from_status_id', 'to_status_id'];
+    protected $fillable = ['project_id', 'from_status_id', 'to_status_id'];
 
-    public function team()
+    public function project()
     {
-        return $this->belongsTo(Teams::class, 'team_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function fromStatus()

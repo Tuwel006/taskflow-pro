@@ -3,7 +3,7 @@
     {{-- ── Page Header ── --}}
     <x-page-header title="Task Board" subtitle="Manage and track all tasks across stages" :breadcrumbItems="[['label' => 'Tasks']]">
         <x-slot name="actions">
-            <a href="/tasks/create/team/{{ $selectedTeam }}" wire:navigate
+            <a href="/tasks/create/project/{{ $selectedProject }}" wire:navigate
                 class="btn btn-primary d-flex align-items-center gap-2"
                 style="font-size:0.8125rem;font-weight:600;border-radius:6px;background:#4f46e5;border:none;padding:0.45rem 1rem;box-shadow:0 2px 6px rgba(79,70,229,.35);">
                 <i class="bi bi-plus-lg"></i> Create Task
@@ -11,18 +11,18 @@
         </x-slot>
     </x-page-header>
 
-    {{-- ── Top bar: Team selector + View toggle + Filters ── --}}
+    {{-- ── Top bar: Project selector + View toggle + Filters ── --}}
     <div class="d-flex flex-wrap align-items-center gap-2 mb-3"
         style="background:#fff;border:1px solid #e8ecf0;border-radius:10px;padding:0.6rem 1rem;">
 
-        {{-- Team Select --}}
+        {{-- Project Select --}}
         <div class="d-flex align-items-center gap-2 me-1">
             <i class="bi bi-people-fill text-muted" style="font-size:0.85rem;"></i>
-            <select wire:model.live="selectedTeam" class="form-select form-select-sm"
+            <select wire:model.live="selectedProject" class="form-select form-select-sm"
                 style="min-width:180px;font-size:0.8125rem;font-weight:600;border:1.5px solid #e2e8f0;color:#0f172a;background:#f8fafc;border-radius:6px;">
-                @foreach ($teams as $team)
-                    <option value="{{ $team->id }}" @selected($selectedTeam == $team->id)>
-                        {{ $team->name }}
+                @foreach ($projects as $project)
+                    <option value="{{ $project->id }}" @selected($selectedProject == $project->id)>
+                        {{ $project->name }}
                     </option>
                 @endforeach
             </select>
@@ -73,7 +73,7 @@
         @endif
 
         {{-- Loading spinner --}}
-        <div wire:loading wire:target="search,status,priority,selectedTeam,setViewMode" class="ms-auto">
+        <div wire:loading wire:target="search,status,priority,selectedProject,setViewMode" class="ms-auto">
             <span class="spinner-border spinner-border-sm text-primary" style="width:.8rem;height:.8rem;"></span>
         </div>
     </div>
@@ -115,7 +115,7 @@
                             </th>
                             <th
                                 style="padding:0.85rem 1rem;font-size:0.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:none;">
-                                <i class="bi bi-people me-1 opacity-75"></i>Team
+                                <i class="bi bi-people me-1 opacity-75"></i>Project
                             </th>
                             <th
                                 style="padding:0.85rem 1rem;font-size:0.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;border:none;">
@@ -261,15 +261,15 @@
                                         </span>
                                     @endif
                                 </td>
-                                {{-- Team --}}
+                                {{-- Project --}}
                                 <td style="padding:0.75rem 1rem;white-space:nowrap;">
-                                    @if ($task->team)
+                                    @if ($task->project)
                                         <span class="badge d-inline-flex align-items-center gap-1"
                                             style="font-size:0.68rem;background:#e0f2fe;color:#0369a1;padding:0.28rem 0.65rem;border-radius:5px;">
                                             <i class="bi bi-people-fill" style="font-size:0.6rem;"></i>
-                                            {{ $task->team->name }}
-                                            @if ($task->team->prefix)
-                                                <span style="opacity:.7;">[{{ $task->team->prefix }}]</span>
+                                            {{ $task->project->name }}
+                                            @if ($task->project->prefix)
+                                                <span style="opacity:.7;">[{{ $task->project->prefix }}]</span>
                                             @endif
                                         </span>
                                     @else
@@ -403,8 +403,8 @@
                                     ];
                                     $sColor = $task->statusRecord->color ?? $stColor;
                                     $isOverdue = $task->due_date && \Carbon\Carbon::parse($task->due_date)->isPast();
-                                    $teamPrefix = $task->team->prefix ?? 'TF';
-                                    $taskKey = strtoupper($teamPrefix) . '-' . $task->id;
+                                    $projectPrefix = $task->project->prefix ?? 'TF';
+                                    $taskKey = strtoupper($projectPrefix) . '-' . $task->id;
                                 @endphp
 
                                 <div class="kb-card bg-white rounded shadow-sm"
@@ -500,13 +500,13 @@
                                             </div>
                                         </div>
 
-                                        {{-- Row 6: Team badge --}}
-                                        @if ($task->team)
+                                        {{-- Row 6: Project badge --}}
+                                        @if ($task->project)
                                             <div class="mt-2 pt-1" style="border-top:1px solid #f1f5f9;">
                                                 <span class="d-inline-flex align-items-center gap-1"
                                                     style="font-size:0.62rem;font-weight:600;background:#dbeafe;color:#1d4ed8;padding:0.15rem 0.5rem;border-radius:4px;">
                                                     <i class="bi bi-people-fill" style="font-size:0.55rem;"></i>
-                                                    {{ $task->team->name }}
+                                                    {{ $task->project->name }}
                                                 </span>
                                             </div>
                                         @endif

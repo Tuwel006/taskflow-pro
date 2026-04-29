@@ -2,7 +2,7 @@
     <x-page-header 
         title="Register System User" 
         subtitle="Fill in all fields defined in the system schema"
-        :breadcrumbItems="[['label' => 'Team', 'url' => '/users'], ['label' => 'Create']]"
+        :breadcrumbItems="[['label' => 'Project', 'url' => '/users'], ['label' => 'Create']]"
     >
         <x-slot name="actions">
             <a href="/users" wire:navigate class="btn btn-sm btn-outline-secondary px-3 shadow-sm d-flex align-items-center" style="font-weight: 600; border-radius: 6px;">

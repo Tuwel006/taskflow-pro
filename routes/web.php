@@ -12,7 +12,7 @@ use App\Livewire\TaskStatus\Create as TaskStatusCreate;
 use App\Livewire\TaskStatus\Edit as TaskStatusEdit;
 use App\Livewire\TaskStatus\Index as TaskStatusIndex;
 use App\Livewire\TaskTypes\Index as TaskTypeIndex;
-use App\Livewire\Teams\Index as TeamIndex;
+use App\Livewire\Projects\Index as ProjectIndex;
 use App\Livewire\User\Create as UserCreate;
 use App\Livewire\User\Edit as UserEdit;
 use App\Livewire\User\Index as UserIndex;
@@ -38,9 +38,9 @@ Route::middleware(['auth'])->group(function () {
 
         return redirect()->route('login');
     })->name('logout');
-    Route::get('/tasks/create/team/{teamId}', TaskCreate::class)->name('tasks.create');
+    Route::get('/tasks/create/project/{projectId}', TaskCreate::class)->name('tasks.create');
     Route::get('/task-types', TaskTypeIndex::class)->name('task-types');
-    Route::get('/teams', TeamIndex::class)->name('teams');
+    Route::get('/projects', ProjectIndex::class)->name('projects');
     Route::get('/task-statuses', TaskStatusIndex::class)->name('task-statuses');
     Route::get('/task-statuses/create', TaskStatusCreate::class)->name('task-statuses.create');
     Route::get('/task-statuses/{id}/edit', TaskStatusEdit::class)->name('task-statuses.edit');

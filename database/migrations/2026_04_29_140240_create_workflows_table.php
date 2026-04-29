@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('workflows', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('team_id')->constrained('teams')->cascadeOnDelete();
+            $table->foreignId('project_id')->constrained('projects')->cascadeOnDelete();
             $table->foreignId('from_status_id')->constrained('task_statuses')->cascadeOnDelete();
             $table->foreignId('to_status_id')->constrained('task_statuses')->cascadeOnDelete();
             $table->timestamps();

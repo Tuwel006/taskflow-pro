@@ -16,7 +16,7 @@ class Task extends Model
         'description',
         'task_status_id',
         'task_type_id',
-        'team_id',
+        'project_id',
         'priority',
         'due_date',
         'assigned_to',
@@ -33,9 +33,9 @@ class Task extends Model
         return $this->belongsTo(TaskStatus::class, 'task_status_id');
     }
 
-    public function team()
+    public function project()
     {
-        return $this->belongsTo(Teams::class, 'team_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function assignee()
@@ -54,7 +54,7 @@ class Task extends Model
             return true;
         }
 
-        return Workflow::where('team_id', $this->team_id)
+        return Workflow::where('project_id', $this->project_id)
             ->where('from_status_id', $this->task_status_id)
             ->where('to_status_id', $newStatusId)
             ->exists();
@@ -62,7 +62,7 @@ class Task extends Model
 
     public function getAllowedStatuses()
     {
-        $toStatusIds = Workflow::where('team_id', $this->team_id)
+        $toStatusIds = Workflow::where('project_id', $this->project_id)
             ->where('from_status_id', $this->task_status_id)
             ->pluck('to_status_id');
 

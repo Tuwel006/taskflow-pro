@@ -22,7 +22,7 @@ View Your Dashboard
 If you have any questions, feel free to reply to this email or visit our [support center]({{ config('app.url') }}/support).
 
 Stay productive,<br>
-The {{ config('app.name') }} Team
+The {{ config('app.name') }} Project
 
 <x-mail::subcopy>
 If you’re having trouble clicking the "View Your Dashboard" button, copy and paste the URL below into your web browser: [{{ config('app.url') }}/dashboard]({{ config('app.url') }}/dashboard)

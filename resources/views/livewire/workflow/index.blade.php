@@ -9,14 +9,14 @@
                     </div>
                     <div>
                         <h6 class="fw-bold text-dark mb-0 small">Workflow Designer</h6>
-                        <p class="text-muted mb-0" style="font-size: 0.65rem;">Optimize your team movement</p>
+                        <p class="text-muted mb-0" style="font-size: 0.65rem;">Optimize your project movement</p>
                     </div>
                 </div>
                 <div class="d-flex align-items-center gap-2">
-                    <label class="fw-bold text-muted text-uppercase mb-0" style="font-size: 0.6rem; letter-spacing: 0.5px;">Team</label>
-                    <select wire:model.live="selectedTeamId" class="form-select form-select-sm border-0 bg-light shadow-none fw-semibold text-dark py-1" style="min-width: 150px; border-radius: 6px; font-size: 0.75rem;">
-                        @foreach($teams as $team)
-                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                    <label class="fw-bold text-muted text-uppercase mb-0" style="font-size: 0.6rem; letter-spacing: 0.5px;">Project</label>
+                    <select wire:model.live="selectedProjectId" class="form-select form-select-sm border-0 bg-light shadow-none fw-semibold text-dark py-1" style="min-width: 150px; border-radius: 6px; font-size: 0.75rem;">
+                        @foreach($projects as $project)
+                            <option value="{{ $project->id }}">{{ $project->name }}</option>
                         @endforeach
                     </select>
                 </div>

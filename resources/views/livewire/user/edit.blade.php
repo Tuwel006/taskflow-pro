@@ -2,7 +2,7 @@
     <x-page-header 
         title="Edit System User" 
         subtitle="Modify existing identity and access configuration"
-        :breadcrumbItems="[['label' => 'Team', 'url' => '/users'], ['label' => 'Edit']]"
+        :breadcrumbItems="[['label' => 'Project', 'url' => '/users'], ['label' => 'Edit']]"
     >
         <x-slot name="actions">
             <a href="/users" wire:navigate class="btn btn-sm btn-outline-secondary px-3 shadow-sm d-flex align-items-center" style="font-weight: 600; border-radius: 6px;">

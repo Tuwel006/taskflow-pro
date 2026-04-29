@@ -11,13 +11,13 @@
                 <div class="x-small text-muted mt-1">Fill in the details below to add a task</div>
             </div>
             {{-- <div>
-                <select>{{ $curr_team->name }}</
+                <select>{{ $curr_project->name }}</
             </div> --}}
         </div>
         <div class="d-flex align-items-center gap-2 mt-1">
             <span class="badge bg-primary-subtle text-primary border fw-medium px-2 py-1">
                 <i class="bi bi-people-fill me-1"></i>
-                {{ $curr_team->name }}
+                {{ $curr_project->name }}
             </span>
         </div>
         @if ($inModal)

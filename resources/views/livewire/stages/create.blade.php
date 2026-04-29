@@ -1,7 +1,7 @@
 <div class="container-fluid py-2">
     <x-page-header
         title="Create Workflow Stage"
-        subtitle="Add a new stage to team workflow"
+        subtitle="Add a new stage to project workflow"
         :breadcrumbItems="[['label' => 'Workflow Stages', 'url' => '/stages'], ['label' => 'Create']]"
     >
         <x-slot name="actions">
@@ -20,14 +20,14 @@
                         <h6 class="fw-bold mb-3" style="font-size: 0.875rem; color: #1e293b; border-left: 3px solid #3b82f6; padding-left: 10px;">Stage Configuration</h6>
 
                         <div class="mb-3">
-                            <label class="form-label fw-semibold" style="font-size: 0.75rem; color: #64748b;">Team <span class="text-danger">*</span></label>
-                            <select wire:model.blur="team_id" name="team_id" class="form-select" style="font-size: 0.8125rem; border-radius: 6px;">
-                                <option value="">-- Select Team --</option>
-                                @foreach ($teams as $team)
-                                    <option value="{{ $team->id }}">{{ $team->name }}</option>
+                            <label class="form-label fw-semibold" style="font-size: 0.75rem; color: #64748b;">Project <span class="text-danger">*</span></label>
+                            <select wire:model.blur="project_id" name="project_id" class="form-select" style="font-size: 0.8125rem; border-radius: 6px;">
+                                <option value="">-- Select Project --</option>
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}">{{ $project->name }}</option>
                                 @endforeach
                             </select>
-                            @error('team_id') <span class="text-danger small">{{ $message }}</span> @enderror
+                            @error('project_id') <span class="text-danger small">{{ $message }}</span> @enderror
                         </div>
 
                         <div class="mb-3">
@@ -75,10 +75,10 @@
                                 </div>
                             </div>
                             <div>
-                                <small class="text-muted">Team</small>
+                                <small class="text-muted">Project</small>
                                 <div class="fw-bold text-dark" style="font-size: 0.875rem;">
-                                    @if ($team_id)
-                                        {{ $teams->find($team_id)->name }}
+                                    @if ($project_id)
+                                        {{ $projects->find($project_id)->name }}
                                     @else
                                         Not selected
                                     @endif

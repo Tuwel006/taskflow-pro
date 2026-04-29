@@ -3,14 +3,14 @@
 namespace App\Livewire\Workflow;
 
 use App\Models\TaskStatus;
-use App\Models\Teams;
+use App\Models\Project;
 use App\Models\Workflow;
 use App\Models\Stage;
 use Livewire\Component;
 
 class Index extends Component
 {
-    public $selectedTeamId;
+    public $selectedProjectId;
     public $fromStatusId;
     public $toStatusId;
     public $tab = 'stages'; // 'stages' or 'flow'
@@ -25,14 +25,14 @@ class Index extends Component
     protected $rules = [
         'fromStatusId' => 'required|exists:task_statuses,id',
         'toStatusId' => 'required|exists:task_statuses,id|different:fromStatusId',
-        'selectedTeamId' => 'required|exists:teams,id',
+        'selectedProjectId' => 'required|exists:projects,id',
     ];
 
     public function mount()
     {
-        $firstTeam = Teams::where('is_active', true)->first();
-        if ($firstTeam) {
-            $this->selectedTeamId = $firstTeam->id;
+        $firstProject = Project::where('is_active', true)->first();
+        if ($firstProject) {
+            $this->selectedProjectId = $firstProject->id;
         }
     }
 
@@ -51,7 +51,7 @@ class Index extends Component
 
     public function editStage($id)
     {
-        $stage = Stage::where('team_id', $this->selectedTeamId)->findOrFail($id);
+        $stage = Stage::where('project_id', $this->selectedProjectId)->findOrFail($id);
         $this->editingStageId = $stage->id;
         $this->stageStatusId = $stage->status_id;
         $this->stagePosition = $stage->position;
@@ -62,17 +62,17 @@ class Index extends Component
         $this->validate([
             'stageStatusId' => 'required|exists:task_statuses,id',
             'stagePosition' => 'required|integer|min:0',
-            'selectedTeamId' => 'required|exists:teams,id',
+            'selectedProjectId' => 'required|exists:projects,id',
         ]);
 
-        // Check if status already exists for this team (excluding current if editing)
-        $exists = Stage::where('team_id', $this->selectedTeamId)
+        // Check if status already exists for this project (excluding current if editing)
+        $exists = Stage::where('project_id', $this->selectedProjectId)
             ->where('status_id', $this->stageStatusId)
             ->when($this->editingStageId, fn($q) => $q->where('id', '!=', $this->editingStageId))
             ->exists();
 
         if ($exists) {
-            $this->dispatch('toast', ['message' => 'This status is already assigned to this team.', 'type' => 'danger']);
+            $this->dispatch('toast', ['message' => 'This status is already assigned to this project.', 'type' => 'danger']);
             return;
         }
 
@@ -85,7 +85,7 @@ class Index extends Component
             $this->dispatch('toast', ['message' => 'Stage updated successfully.', 'type' => 'success']);
         } else {
             Stage::create([
-                'team_id' => $this->selectedTeamId,
+                'project_id' => $this->selectedProjectId,
                 'status_id' => $this->stageStatusId,
                 'position' => $this->stagePosition,
             ]);
@@ -95,7 +95,7 @@ class Index extends Component
         $this->resetStageForm();
     }
 
-    public function updatedSelectedTeamId()
+    public function updatedSelectedProjectId()
     {
         $this->resetStageForm();
         $this->fromStatusId = null;
@@ -104,7 +104,7 @@ class Index extends Component
 
     public function deleteStage($id)
     {
-        Stage::where('id', $id)->where('team_id', $this->selectedTeamId)->delete();
+        Stage::where('id', $id)->where('project_id', $this->selectedProjectId)->delete();
         $this->dispatch('toast', ['message' => 'Workflow stage deleted successfully.', 'type' => 'success']);
     }
 
@@ -113,7 +113,7 @@ class Index extends Component
         $this->validate();
 
         // Check for duplicates
-        $exists = Workflow::where('team_id', $this->selectedTeamId)
+        $exists = Workflow::where('project_id', $this->selectedProjectId)
             ->where('from_status_id', $this->fromStatusId)
             ->where('to_status_id', $this->toStatusId)
             ->exists();
@@ -124,7 +124,7 @@ class Index extends Component
         }
 
         Workflow::create([
-            'team_id' => $this->selectedTeamId,
+            'project_id' => $this->selectedProjectId,
             'from_status_id' => $this->fromStatusId,
             'to_status_id' => $this->toStatusId,
         ]);
@@ -135,17 +135,17 @@ class Index extends Component
 
     public function deleteTransition($id)
     {
-        $workflow = Workflow::where('team_id', $this->selectedTeamId)->findOrFail($id);
+        $workflow = Workflow::where('project_id', $this->selectedProjectId)->findOrFail($id);
         $workflow->delete();
         $this->dispatch('toast', ['message' => 'Transition removed.', 'type' => 'success']);
     }
 
     public function render()
     {
-        $teams = Teams::where('is_active', true)->get();
+        $projects = Project::where('is_active', true)->get();
         
-        // Get all statuses available for this team via Stages
-        $stages = Stage::where('team_id', $this->selectedTeamId)
+        // Get all statuses available for this project via Stages
+        $stages = Stage::where('project_id', $this->selectedProjectId)
             ->with('status')
             ->when($this->search, function($query) {
                 $query->whereHas('status', function($q) {
@@ -157,12 +157,12 @@ class Index extends Component
 
         $availableStatuses = $stages->pluck('status')->filter();
 
-        $workflows = Workflow::where('team_id', $this->selectedTeamId)
+        $workflows = Workflow::where('project_id', $this->selectedProjectId)
             ->with(['fromStatus', 'toStatus'])
             ->get();
 
         return view('livewire.workflow.index', [
-            'teams' => $teams,
+            'projects' => $projects,
             'stages' => $stages,
             'availableStatuses' => $availableStatuses,
             'workflows' => $workflows,

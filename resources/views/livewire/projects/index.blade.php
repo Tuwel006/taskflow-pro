@@ -1,9 +1,9 @@
 <div>
-    <x-page-header title="Teams" subtitle="Manage your teams" :breadcrumbItems="[['label' => 'Teams', 'url' => '/teams'], ['label' => 'List']]">
+    <x-page-header title="Projects" subtitle="Manage your projects" :breadcrumbItems="[['label' => 'Projects', 'url' => '/projects'], ['label' => 'List']]">
         <x-slot name="actions">
-            <a href="/teams/create" wire:navigate class="btn btn-primary px-3 shadow-sm d-flex align-items-center"
+            <a href="/projects/create" wire:navigate class="btn btn-primary px-3 shadow-sm d-flex align-items-center"
                 style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px; background: #0f172a; border: none;">
-                <i class="bi bi-plus me-2"></i> Add Team
+                <i class="bi bi-plus me-2"></i> Add Project
             </a>
         </x-slot>
     </x-page-header>
@@ -28,7 +28,7 @@
         </div>
     @endif
 
-    <x-data-table :items="$teams" emptyIcon="bi-people" emptyText="No team records found matching your criteria.">
+    <x-data-table :items="$projects" emptyIcon="bi-people" emptyText="No project records found matching your criteria.">
         <x-slot name="header">
             <div class="row g-2 align-items-center">
                 <div class="col-md-4">
@@ -69,19 +69,19 @@
             <x-table.th align="end"></x-table.th>
         </x-slot>
 
-        @foreach ($teams as $team)
-            <x-table.row wire:key="team-{{ $team->id }}">
+        @foreach ($projects as $project)
+            <x-table.row wire:key="project-{{ $project->id }}">
                 <x-table.td>
                     <div class="d-flex align-items-center gap-3">
                         <div>
-                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $team->id }}</div>
+                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $project->id }}</div>
                         </div>
                     </div>
                 </x-table.td>
                 <x-table.td>
                     <div class="d-flex align-items-center gap-3">
                         <div>
-                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $team->name }}</div>
+                            <div class="fw-bold text-dark" style="font-size: 0.875rem;">{{ $project->name }}</div>
                         </div>
                     </div>
                 </x-table.td>
@@ -89,12 +89,12 @@
                 <x-table.td>
                     <div class="d-flex flex-column">
                         <span class="fw-bold text-dark"
-                            style="font-size: 0.875rem;">{{ $team->prefix ?? 'N/A' }}</span>
+                            style="font-size: 0.875rem;">{{ $project->prefix ?? 'N/A' }}</span>
                     </div>
                 </x-table.td>
 
                 <x-table.td>
-                    @if ($team->is_active)
+                    @if ($project->is_active)
                         <span class="badge bg-success-subtle text-success border border-success-subtle"
                             style="font-size: 0.65rem; font-weight: 600; padding: 0.35em 0.65em;">
                             <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i> Active
@@ -109,7 +109,7 @@
 
                 <x-table.td align="end">
                     <div class="d-flex justify-content-end gap-2">
-                        <a href="/teams/{{ $team->id }}/edit" wire:navigate
+                        <a href="/projects/{{ $project->id }}/edit" wire:navigate
                             class="btn btn-sm btn-outline-secondary border-0" style="font-size: 0.75rem;"
                             title="Edit">
                             <i class="bi bi-pencil"></i>

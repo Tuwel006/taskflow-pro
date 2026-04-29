@@ -4,9 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class User_Team extends Model
+class ProjectUser extends Model
 {
-    protected $table = 'user_team';
+    protected $table = 'project_user';
     protected $guarded = [];
 
     public function user()
@@ -14,8 +14,8 @@ class User_Team extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function team()
+    public function project()
     {
-        return $this->belongsTo(Teams::class);
+        return $this->belongsTo(Project::class);
     }
 }

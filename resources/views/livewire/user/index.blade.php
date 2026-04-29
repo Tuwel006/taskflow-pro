@@ -1,6 +1,6 @@
 <div class="container-fluid py-2">
     <x-page-header title="User Management" subtitle="Maintain and audit your organization's human capital"
-        :breadcrumbItems="[['label' => 'Team', 'url' => '/users'], ['label' => 'Directory']]">
+        :breadcrumbItems="[['label' => 'Project', 'url' => '/users'], ['label' => 'Directory']]">
         <x-slot name="actions">
             <a href="/users/create" wire:navigate class="btn btn-primary px-3 shadow-sm d-flex align-items-center"
                 style="font-size: 0.8125rem; font-weight: 600; border-radius: 6px; background: #0f172a; border: none;">
@@ -78,10 +78,10 @@
                             <option value="50">50</option>
                         </select>
                     </div>
-                    <select class="form-select form-select-sm" style="width: 130px;" wire:model.live="selectedTeamId">
-                        <option value="">All Teams</option>
-                        @foreach($teams as $team)
-                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                    <select class="form-select form-select-sm" style="width: 130px;" wire:model.live="selectedProjectId">
+                        <option value="">All Projects</option>
+                        @foreach($projects as $project)
+                            <option value="{{ $project->id }}">{{ $project->name }}</option>
                         @endforeach
                     </select>
                     <select class="form-select form-select-sm" style="width: 120px;">
@@ -103,7 +103,7 @@
             <x-table.th>Member</x-table.th>
             <x-table.th>Role & Type</x-table.th>
             <x-table.th>Contact Info</x-table.th>
-            <x-table.th>Teams</x-table.th>
+            <x-table.th>Projects</x-table.th>
             <x-table.th>Status</x-table.th>
             <x-table.th align="end"></x-table.th>
         </x-slot>
@@ -131,10 +131,10 @@
                 </x-table.td>
                 <x-table.td>
                     <div class="d-flex flex-wrap gap-1" style="max-width: 180px;">
-                        @forelse($user->teams as $team)
+                        @forelse($user->projects as $project)
                             <span class="badge"
                                 style="font-size: 0.65rem; background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">
-                                <i class="bi bi-people-fill me-1"></i>{{ $team->name }}
+                                <i class="bi bi-people-fill me-1"></i>{{ $project->name }}
                             </span>
                         @empty
                             <span class="text-muted" style="font-size: 0.7rem;">None</span>

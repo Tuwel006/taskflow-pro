@@ -152,7 +152,7 @@
                             style="width: 24px; height: 24px; font-size: 0.6rem; margin-left: -8px; border: 2px solid #fff;">
                             RK</div>
                     </div>
-                    <p class="mb-0" style="font-size: 0.75rem; color: #64748b;">Collaborate with your team</p>
+                    <p class="mb-0" style="font-size: 0.75rem; color: #64748b;">Collaborate with your project</p>
                     <a href="#" class="text-decoration-none fw-bold"
                         style="font-size: 0.75rem; color: #334155;">Invite Members</a>
                 </div>

@@ -6,11 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Stage extends Model
 {
-    protected $fillable = ['team_id', 'status_id', 'position'];
+    protected $fillable = ['project_id', 'status_id', 'position'];
 
-    public function team()
+    public function project()
     {
-        return $this->belongsTo(Teams::class, 'team_id');
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
     public function status()

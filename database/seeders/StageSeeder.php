@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Stage;
 use App\Models\TaskStatus;
-use App\Models\Teams;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
 
 class StageSeeder extends Seeder
@@ -14,15 +14,15 @@ class StageSeeder extends Seeder
      */
     public function run(): void
     {
-        $teams = Teams::all();
+        $projects = Project::all();
         $statuses = TaskStatus::all();
 
-        // For each team, create a workflow with all statuses in order
-        foreach ($teams as $team) {
+        // For each project, create a workflow with all statuses in order
+        foreach ($projects as $project) {
             $position = 1;
             foreach ($statuses as $status) {
                 Stage::create([
-                    'team_id' => $team->id,
+                    'project_id' => $project->id,
                     'status_id' => $status->id,
                     'position' => $position,
                 ]);

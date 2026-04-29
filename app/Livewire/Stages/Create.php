@@ -4,12 +4,12 @@ namespace App\Livewire\Stages;
 
 use App\Models\Stage;
 use App\Models\TaskStatus;
-use App\Models\Teams;
+use App\Models\Project;
 use Livewire\Component;
 
 class Create extends Component
 {
-    public $team_id;
+    public $project_id;
 
     public $status_id;
 
@@ -17,40 +17,40 @@ class Create extends Component
 
     public function render()
     {
-        $teams = Teams::where('is_active', true)->get();
+        $projects = Project::where('is_active', true)->get();
         $statuses = TaskStatus::all();
 
-        return view('livewire.stages.create', compact('teams', 'statuses'));
+        return view('livewire.stages.create', compact('projects', 'statuses'));
     }
 
     public function store()
     {
         $validated = $this->validate([
-            'team_id' => 'required|exists:teams,id',
+            'project_id' => 'required|exists:projects,id',
             'status_id' => 'required|exists:task_statuses,id',
             'position' => 'nullable|integer|min:0',
         ]);
 
         if ($validated['position'] === null) {
-            $nextPosition = Stage::where('team_id', $validated['team_id'])->max('position');
+            $nextPosition = Stage::where('project_id', $validated['project_id'])->max('position');
             $validated['position'] = $nextPosition === null ? 0 : $nextPosition + 1;
         }
 
-        $statusExists = Stage::where('team_id', $validated['team_id'])
+        $statusExists = Stage::where('project_id', $validated['project_id'])
             ->where('status_id', $validated['status_id'])
             ->exists();
 
         if ($statusExists) {
-            $this->addError('status_id', 'This status is already assigned to this team.');
+            $this->addError('status_id', 'This status is already assigned to this project.');
             return;
         }
 
-        $positionExists = Stage::where('team_id', $validated['team_id'])
+        $positionExists = Stage::where('project_id', $validated['project_id'])
             ->where('position', $validated['position'])
             ->exists();
 
         if ($positionExists) {
-            $this->addError('position', 'Another stage already uses this position for the selected team.');
+            $this->addError('position', 'Another stage already uses this position for the selected project.');
             return;
         }
 

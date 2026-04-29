@@ -8,7 +8,7 @@ use App\Models\Stage;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\TaskType;
-use App\Models\Teams;
+use App\Models\Project;
 use App\Models\User;
 use Livewire\Component;
 
@@ -30,24 +30,24 @@ class Create extends Component
     public $assigned_to;
 
     public $users;
-    public $curr_team;
+    public $curr_project;
 
     public $statuses;
 
     public $taskTypes;
 
-    public $team_id;
+    public $project_id;
 
     public $inModal = false;
 
-    public function mount($teamId)
+    public function mount($projectId)
     {
-        $this->team_id = $teamId;
-        $this->users = User::whereHas('teams', function ($query) {
-            $query->where('team_id', $this->team_id)->where('is_active', true)->where('type', 1);
+        $this->project_id = $projectId;
+        $this->users = User::whereHas('projects', function ($query) {
+            $query->where('project_id', $this->project_id)->where('is_active', true)->where('type', 1);
         })->get();
         $this->statuses = Stage::with('status')
-            ->where('team_id', $this->team_id)
+            ->where('project_id', $this->project_id)
             ->orderBy('position')
             ->get()
             ->pluck('status')
@@ -60,8 +60,8 @@ class Create extends Component
         $this->task_type_id = $this->taskTypes->first()->id ?? null;
         $this->priority = TaskPriority::MEDIUM;
         $this->due_date = now()->format('Y-m-d');
-        $this->curr_team = Teams::where('id', $this->team_id)->first();
-        // dd($this->curr_team->toJson(JSON_PRETTY_PRINT));
+        $this->curr_project = Project::where('id', $this->project_id)->first();
+        // dd($this->curr_project->toJson(JSON_PRETTY_PRINT));
     }
     
     public function render()
@@ -87,7 +87,7 @@ class Create extends Component
             'task_status_id' => $this->status_id,
             'task_type_id' => $this->task_type_id,
             'priority' => $this->priority,
-            'team_id' => $this->team_id,
+            'project_id' => $this->project_id,
             'due_date' => $this->due_date,
             'assigned_to' => $this->assigned_to,
             'created_by' => auth()->id(),

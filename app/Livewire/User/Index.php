@@ -4,7 +4,7 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use App\Models\User;
-use App\Models\Teams;
+use App\Models\Project;
 use Livewire\WithPagination;
 
 class Index extends Component
@@ -14,7 +14,7 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public $itemPerPage = 10;
     public $search = '';
-    public $selectedTeamId = '';
+    public $selectedProjectId = '';
 
     public function updatingItemPerPage()
     {
@@ -26,18 +26,18 @@ class Index extends Component
         $this->resetPage();
     }
 
-    public function updatingSelectedTeamId()
+    public function updatingSelectedProjectId()
     {
         $this->resetPage();
     }
 
     public function render()
     {
-        $teams = Teams::where('is_active', true)->get();
-        $users = User::with(['teams'])
-            ->when($this->selectedTeamId, function($query) {
-                $query->whereHas('teams', function($q) {
-                    $q->where('teams.id', $this->selectedTeamId);
+        $projects = Project::where('is_active', true)->get();
+        $users = User::with(['projects'])
+            ->when($this->selectedProjectId, function($query) {
+                $query->whereHas('projects', function($q) {
+                    $q->where('projects.id', $this->selectedProjectId);
                 });
             })
             ->where(function($query) {
@@ -45,7 +45,7 @@ class Index extends Component
                     ->orWhere('email', 'like', '%' . $this->search . '%')
                     ->orWhere('phone', 'like', '%' . $this->search . '%');
             })->paginate($this->itemPerPage);
-        return view('livewire.user.index', compact('users', 'teams'));
+        return view('livewire.user.index', compact('users', 'projects'));
     }
 
     public function delete($id)

@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use App\Models\Teams;
+use App\Models\Project;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -60,21 +60,21 @@ class DatabaseSeeder extends Seeder
         $this->call([
             TaskStatusSeeder::class,
             TaskTypeSeeder::class,
-            TeamsSeeder::class,
+            ProjectSeeder::class,
             StageSeeder::class,
             TaskSeeder::class,
             WorkflowSeeder::class,
         ]);
 
-        // 4. Attach users to teams
-        $teams = Teams::all();
+        // 4. Attach users to projects
+        $projects = Project::all();
         foreach ($users as $user) {
             if ($user->id === $admin->id) {
-                // Admin gets all teams
-                $user->teams()->attach($teams->pluck('id'));
+                // Admin gets all projects
+                $user->projects()->attach($projects->pluck('id'));
             } else {
-                // Other users get 2 to 4 random teams
-                $user->teams()->attach($teams->random(rand(2, 4))->pluck('id'));
+                // Other users get 2 to 4 random projects
+                $user->projects()->attach($projects->random(rand(2, 4))->pluck('id'));
             }
         }
     }
