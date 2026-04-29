@@ -89,4 +89,29 @@ class Task extends Model
 
         return TaskStatus::whereIn('id', $toStatusIds)->get();
     }
+    public function getIsCompletedAttribute()
+    {
+        if (!$this->project_id) return false;
+        return $this->task_status_id == $this->project->getCompletedStatusId();
+    }
+
+    public function scopeCompleted($query)
+    {
+        return $query->whereIn('task_status_id', function ($q) {
+            $q->select('status_id')
+                ->from('stages as s1')
+                ->whereRaw('s1.project_id = task.project_id')
+                ->whereRaw('s1.position = (select max(position) from stages as s2 where s2.project_id = task.project_id)');
+        });
+    }
+
+    public function scopeNotCompleted($query)
+    {
+        return $query->whereNotIn('task_status_id', function ($q) {
+            $q->select('status_id')
+                ->from('stages as s1')
+                ->whereRaw('s1.project_id = task.project_id')
+                ->whereRaw('s1.position = (select max(position) from stages as s2 where s2.project_id = task.project_id)');
+        });
+    }
 }

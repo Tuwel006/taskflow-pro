@@ -25,17 +25,18 @@ class Dashboard extends Component
 
     public function render()
     {
+        // Dynamic completion count for each project in the list
         $clientProjects = auth()->user()->projects()->withCount(['tasks', 'tasks as completed_tasks' => function($q) {
-            $q->whereHas('statusRecord', function($sq) { $sq->where('name', 'Completed'); });
+            $q->completed();
         }])->get();
 
         $selectedProject = $clientProjects->firstWhere('id', $this->selectedProjectId);
 
         $tasks = Task::where('project_id', $this->selectedProjectId);
         $totalTasks = (clone $tasks)->count();
-        $completedTasks = (clone $tasks)->whereHas('statusRecord', function($q) {
-            $q->where('name', 'Completed');
-        })->count();
+        
+        // Dynamic completion count for the selected project
+        $completedTasks = (clone $tasks)->completed()->count();
 
         $recentUpdates = (clone $tasks)->with(['statusRecord', 'assignee'])
             ->latest('updated_at')

@@ -17,4 +17,20 @@ class Project extends Model
     {
         return $this->hasMany(Task::class, 'project_id');
     }
+
+    public function stages()
+    {
+        return $this->hasMany(Stage::class)->orderBy('position');
+    }
+
+    public function getCompletedStatusId()
+    {
+        $lastStage = $this->getCompletedStage();
+        return $lastStage ? $lastStage->status_id : null;
+    }
+
+    public function getCompletedStage()
+    {
+        return $this->stages()->latest('position')->first();
+    }
 }
