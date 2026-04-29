@@ -10,7 +10,16 @@
                 <h6 class="mb-0 fw-bold text-dark ls-sm">Create New Task</h6>
                 <div class="x-small text-muted mt-1">Fill in the details below to add a task</div>
             </div>
+            {{-- <div>
+                <select>{{ $curr_team->name }}</
+            </div> --}}
         </div>
+        <div class="d-flex align-items-center gap-2 mt-1">
+    <span class="badge bg-primary-subtle text-primary border fw-medium px-2 py-1">
+        <i class="bi bi-people-fill me-1"></i>
+        {{ $curr_team->name }}
+    </span>
+</div>
         @if ($inModal)
             <button type="button" @click="open = false" class="btn-close shadow-none"
                 style="font-size: 0.75rem;"></button>
@@ -42,7 +51,7 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label text-muted fw-semibold x-small text-uppercase ls-sm mb-1">Status</label>
-                <select wire:model="status_id" class="form-select form-select-sm custom-input">
+                <select disabled='true' wire:model="status_id" class="form-select form-select-sm custom-input">
                     @foreach ($statuses as $status)
                         <option value="{{ $status->id }}">{{ $status->name }}</option>
                     @endforeach

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Task;
 
+use App\Models\Stage;
 use App\Models\Task;
 use App\Models\TaskStatus;
 use App\Models\Teams;
@@ -66,7 +67,7 @@ class Board extends Component
         $teams = Teams::where('is_active', true)->get();
 
         if ($this->viewMode === 'list') {
-            $tasks = Task::with(['assignee', 'creator', 'statusRecord', 'team'])
+            $tasks = Task::with(['assignee', 'creator', 'statusRecord', 'team', 'type'])
                 ->when($this->selectedTeam, function ($query) {
                     $query->where('team_id', $this->selectedTeam);
                 })
@@ -91,25 +92,39 @@ class Board extends Component
         }
 
         // Kanban Mode
-        $statuses = TaskStatus::with(['tasks' => function ($query) {
-            $query->when($this->selectedTeam, function ($q) {
-                $q->where('team_id', $this->selectedTeam);
-            })
-            ->with('assignee', 'team')
-            ->orderBy('priority', 'desc');
-        }])->orderBy('order_index')->get();
+        $stages = Stage::where('team_id', $this->selectedTeam)
+            ->with(['status', 'tasks' => function ($query) {
+                $query->when($this->selectedTeam, function ($q) {
+                    $q->where('team_id', $this->selectedTeam);
+                })
+                ->with(['assignee', 'creator', 'team', 'type', 'statusRecord'])
+                ->when($this->search, function ($q) {
+                    $q->where(function ($sq) {
+                        $sq->where('title', 'like', '%'.$this->search.'%')
+                           ->orWhere('description', 'like', '%'.$this->search.'%');
+                    });
+                })
+                ->orderBy('created_at', 'desc');
+            }])->orderBy('position')->get();
 
-        return view('livewire.task.board', compact('statuses', 'teams'));
+        return view('livewire.task.board', compact('stages', 'teams'));
     }
 
-    public function updateStatus($taskId, $statusId)
+    public function updateStatus($taskId, $stageId)
     {
+        // stageId comes from the kanban drop-zone data-stage-id attribute.
+        // We resolve the corresponding task_status_id from the Stage.
+        $stage = Stage::find($stageId);
+        if (! $stage) {
+            return;
+        }
+
         $task = Task::findOrFail($taskId);
-        $task->update(['task_status_id' => $statusId]);
+        $task->update(['task_status_id' => $stage->status_id]);
 
         $this->dispatch('notification', [
-            'type' => 'success',
-            'message' => 'Task status updated.',
+            'type'    => 'success',
+            'message' => 'Task moved to ' . ($stage->status->name ?? 'new stage') . '.',
         ]);
 
         $this->dispatch('taskUpdated');

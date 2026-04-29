@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             TaskStatusSeeder::class,
             TaskTypeSeeder::class,
             TeamsSeeder::class,
+            StageSeeder::class,
         ]);
     }
 }

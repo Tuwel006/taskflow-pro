@@ -2,6 +2,9 @@
 
 use App\Livewire\Auth\Login;
 use App\Livewire\Dashboard;
+use App\Livewire\Stages\Create as StageCreate;
+use App\Livewire\Stages\Edit as StageEdit;
+use App\Livewire\Stages\Index as StageIndex;
 use App\Livewire\Task\Board as TaskBoard;
 use App\Livewire\Task\Create as TaskCreate;
 use App\Livewire\Task\Index as TaskIndex;
@@ -35,12 +38,15 @@ Route::middleware(['auth'])->group(function () {
 
         return redirect()->route('login');
     })->name('logout');
-    Route::get('/tasks/create', TaskCreate::class)->name('tasks.create');
+    Route::get('/tasks/create/team/{teamId}', TaskCreate::class)->name('tasks.create');
     Route::get('/task-types', TaskTypeIndex::class)->name('task-types');
     Route::get('/teams', TeamIndex::class)->name('teams');
     Route::get('/task-statuses', TaskStatusIndex::class)->name('task-statuses');
     Route::get('/task-statuses/create', TaskStatusCreate::class)->name('task-statuses.create');
     Route::get('/task-statuses/{id}/edit', TaskStatusEdit::class)->name('task-statuses.edit');
+    Route::get('/stages', StageIndex::class)->name('stages');
+    Route::get('/stages/create', StageCreate::class)->name('stages.create');
+    Route::get('/stages/{id}/edit', StageEdit::class)->name('stages.edit');
 });
 
 // Route::middleware(['guest'])->group(function () {
