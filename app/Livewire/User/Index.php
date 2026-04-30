@@ -4,7 +4,7 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use App\Models\User;
-use App\Models\Project;
+use App\UserType;
 use Livewire\WithPagination;
 
 class Index extends Component
@@ -14,51 +14,34 @@ class Index extends Component
     protected $paginationTheme = 'bootstrap';
     public $itemPerPage = 10;
     public $search = '';
-    public $selectedProjectId = '';
+    public $status = '';   // '' = all, '1' = active, '0' = inactive
 
-    public function mount()
-    {
-        $this->selectedProjectId = session('selected_project_id', '');
-    }
-
-    public function updatingItemPerPage()
-    {
-        $this->resetPage();
-    }
-
-    public function updatingSearch()
-    {
-        $this->resetPage();
-    }
-
-    public function updatedSelectedProjectId($value)
-    {
-        session(['selected_project_id' => $value]);
-        $this->resetPage();
-    }
+    public function updatingItemPerPage() { $this->resetPage(); }
+    public function updatingSearch()      { $this->resetPage(); }
+    public function updatingStatus()      { $this->resetPage(); }
 
     public function render()
     {
-        $projects = Project::where('is_active', true)->get();
         $users = User::with(['projects'])
-            ->where('type', 1)
-            ->when($this->selectedProjectId, function($query) {
-                $query->whereHas('projects', function($q) {
-                    $q->where('projects.id', $this->selectedProjectId);
-                });
-            })
-            ->where(function($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('email', 'like', '%' . $this->search . '%')
-                    ->orWhere('phone', 'like', '%' . $this->search . '%');
-            })->paginate($this->itemPerPage);
-        return view('livewire.user.index', compact('users', 'projects'));
+            ->where('type', UserType::Agent)
+            ->when($this->search, fn($q) =>
+                $q->where(fn($q) =>
+                    $q->where('name', 'like', '%' . $this->search . '%')
+                      ->orWhere('email', 'like', '%' . $this->search . '%')
+                      ->orWhere('phone', 'like', '%' . $this->search . '%')
+                )
+            )
+            ->when($this->status !== '', fn($q) =>
+                $q->where('is_active', (bool) $this->status)
+            )
+            ->paginate($this->itemPerPage);
+
+        return view('livewire.user.index', compact('users'));
     }
 
     public function delete($id)
     {
-        $user = User::find($id);
-        $user->delete();
+        User::findOrFail($id)->delete();
         session()->flash('message', 'User deleted successfully');
     }
 }

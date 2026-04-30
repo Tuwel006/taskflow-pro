@@ -46,6 +46,32 @@
                             @error('role') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                         <div class="mb-3">
+                            <label class="form-label fw-semibold" style="font-size: 0.75rem; color: #64748b;">Assign Projects</label>
+                            <div wire:ignore>
+                                <select id="projects-select" x-data="{
+                                    init() {
+                                        new TomSelect($el, {
+                                            plugins: ['remove_button'],
+                                            maxItems: null,
+                                            placeholder: 'Select projects...',
+                                            onItemAdd: function() { this.setTextboxValue(''); },
+                                            onChange: (value) => {
+                                                @this.set('selectedProjects', value);
+                                            }
+                                        });
+                                    }
+                                }" multiple style="font-size: 0.8125rem; border-radius: 6px;">
+                                    @foreach($projects as $project)
+                                        <option value="{{ $project->id }}">{{ $project->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mt-1" style="font-size: 0.65rem; color: #94a3b8;">
+                                Search and select multiple projects.
+                            </div>
+                            @error('selectedProjects') <span class="text-danger">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label fw-semibold" style="font-size: 0.75rem; color: #64748b;">Initial Password</label>
                             <input type="password" wire:model.blur="password" class="form-control" placeholder="••••••••" style="font-size: 0.8125rem; border-radius: 6px;">
                             @error('password') <span class="text-danger">{{ $message }}</span> @enderror

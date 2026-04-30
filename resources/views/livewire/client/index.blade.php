@@ -3,12 +3,7 @@
         :breadcrumbItems="[['label' => 'Project', 'url' => '/clients'], ['label' => 'Client List']]">
         <x-slot name="actions">
             <div class="d-flex gap-2">
-                <select class="form-select form-select-sm shadow-sm" style="width: 200px; font-size: 0.8125rem;" wire:model.live="selectedProjectId">
-                    <option value="">All Projects</option>
-                    @foreach($projects as $project)
-                        <option value="{{ $project->id }}">{{ $project->name }}</option>
-                    @endforeach
-                </select>
+
                 <a href="/clients/create" wire:navigate class="btn btn-sm btn-primary px-3 shadow-sm d-flex align-items-center" style="font-weight: 600; border-radius: 6px; background: #3b82f6;">
                     <i class="bi bi-plus-lg me-2"></i> Register Client
                 </a>
@@ -26,9 +21,16 @@
     <div class="card border-0 shadow-sm" style="background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 10px;">
         <div class="card-header bg-white py-3 border-0">
             <div class="d-flex justify-content-between align-items-center">
-                <div class="input-group" style="width: 300px;">
-                    <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
-                    <input type="text" class="form-control bg-light border-0" placeholder="Search clients..." style="font-size: 0.8125rem;" wire:model.live="search">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="input-group" style="width: 300px;">
+                        <span class="input-group-text bg-light border-0"><i class="bi bi-search text-muted"></i></span>
+                        <input type="text" class="form-control bg-light border-0" placeholder="Search clients..." style="font-size: 0.8125rem;" wire:model.live="search">
+                    </div>
+                    <select class="form-select form-select-sm border-0 bg-light" style="width: 120px; font-size: 0.8125rem;" wire:model.live="status">
+                        <option value="">All Status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
+                    </select>
                 </div>
                 <div class="d-flex align-items-center gap-2">
                     <span class="text-muted small">Show</span>

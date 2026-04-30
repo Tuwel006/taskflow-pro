@@ -3,31 +3,26 @@
 namespace App\Livewire\User;
 
 use App\Models\User;
+use App\Models\Project;
 use Livewire\Component;
 
 class Create extends Component
 {
     public $name;
-
     public $email;
-
     public $phone;
-
     public $address;
-
     public $role;
-
     public $type = 1;
-
     public $password;
-
     public $avatar;
-
     public $is_active = true;
+    public $selectedProjects = []; // Multi-select array
 
     public function render()
     {
-        return view('livewire.user.create');
+        $projects = Project::where('is_active', true)->orderBy('name')->get();
+        return view('livewire.user.create', compact('projects'));
     }
 
     public function store()
@@ -41,13 +36,17 @@ class Create extends Component
             'password' => 'required|min:6',
             'avatar' => 'nullable|url',
             'is_active' => 'boolean',
+            'selectedProjects' => 'nullable|array',
         ]);
+
         $validated['type'] = 1;
 
-        User::create($validated);
+        $user = User::create($validated);
 
-        // Fire the custom 'published' event
-        $this->fireModelEvent('status_changed', false);
+        // Assign projects
+        if (!empty($this->selectedProjects)) {
+            $user->projects()->sync($this->selectedProjects);
+        }
 
         session()->flash('success', 'User created successfully');
 

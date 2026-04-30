@@ -78,22 +78,10 @@
                             <option value="50">50</option>
                         </select>
                     </div>
-                    <select class="form-select form-select-sm" style="width: 130px;" wire:model.live="selectedProjectId">
-                        <option value="">All Projects</option>
-                        @foreach($projects as $project)
-                            <option value="{{ $project->id }}">{{ $project->name }}</option>
-                        @endforeach
-                    </select>
-                    <select class="form-select form-select-sm" style="width: 120px;">
-                        <option>All Roles</option>
-                        <option>Admin</option>
-                        <option>Manager</option>
-                        <option>User</option>
-                    </select>
-                    <select class="form-select form-select-sm" style="width: 120px;">
-                        <option>All Status</option>
-                        <option>Active</option>
-                        <option>Inactive</option>
+                    <select class="form-select form-select-sm" style="width: 130px;" wire:model.live="status">
+                        <option value="">All Status</option>
+                        <option value="1">Active</option>
+                        <option value="0">Inactive</option>
                     </select>
                 </div>
             </div>
