@@ -64,6 +64,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/stages/create', StageCreate::class)->name('stages.create');
         Route::get('/stages/{id}/edit', StageEdit::class)->name('stages.edit');
         Route::get('/workflows', App\Livewire\Workflow\Index::class)->name('workflows');
+        Route::get('/profile', App\Livewire\Profile\Index::class)->name('profile');
     });
 
     // --- Client Only Routes ---
@@ -71,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/client/dashboard', App\Livewire\Client\Dashboard::class)->name('client.dashboard');
         Route::get('/client/projects', App\Livewire\Client\Projects\Index::class)->name('client.projects');
         Route::get('/client/tasks', Board::class)->name('client.tasks');
+        Route::get('/client/profile', App\Livewire\Profile\Index::class)->name('client.profile');
     });
 
     Route::post('/logout', function () {
@@ -78,7 +80,11 @@ Route::middleware(['auth'])->group(function () {
 
         return redirect()->route('login');
     })->name('logout');
-    Route::get('/profile', App\Livewire\Profile\Index::class)->name('profile');
+
+    // Route::get('/abc', function () {
+    //     return 'this is abc test';
+    // })->name('abc');
+
 });
 
 Route::get('/login', Login::class)->name('login')->middleware('guest');

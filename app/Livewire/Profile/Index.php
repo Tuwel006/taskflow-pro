@@ -98,14 +98,21 @@ class Index extends Component
 
     public function updatedAvatar()
     {
-        $this->validate(['avatar' => 'image|max:2048']);
+        $this->validate(
+            ['avatar' => 'image|max:10240'],
+            ['avatar.max' => 'The photo must not be larger than 10MB.']
+        );
         $this->avatarPreview = $this->avatar->temporaryUrl();
     }
 
     public function render()
     {
-        return view('livewire.profile.index', [
-            'user' => Auth::user(),
-        ]);
+        $user   = Auth::user();
+        $layout = $user->type === \App\UserType::Client
+            ? 'components.layouts.client'
+            : 'components.layouts.app';
+
+        return view('livewire.profile.index', ['user' => $user])
+            ->layout($layout);
     }
 }

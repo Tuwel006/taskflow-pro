@@ -273,6 +273,9 @@
                 <div class="avatar-overlay"><i class="bi bi-camera-fill"></i></div>
             </label>
             <input id="avatarInput" type="file" wire:model="avatar" accept="image/*" class="d-none">
+            <div style="font-size:.68rem; color:#94a3b8; margin-top:.3rem; text-align:center; width:88px; word-break:break-word; line-height:1.3;">
+                Max 10MB<br>JPG, PNG, WEBP
+            </div>
 
             {{-- Name / Role --}}
             <div class="profile-meta">
