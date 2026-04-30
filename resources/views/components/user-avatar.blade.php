@@ -15,21 +15,35 @@
     $colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
     $colorIndex = abs(crc32($name)) % count($colors);
     $bgColor = $colors[$colorIndex];
+
+    // Build the correct public URL for the avatar
+    $avatarUrl = null;
+    if ($user && $user->avatar) {
+        $av = $user->avatar;
+        if (str_starts_with($av, 'http') || str_starts_with($av, '/')) {
+            $avatarUrl = $av;
+        } else {
+            $avatarUrl = asset('storage/' . $av);
+        }
+    }
 @endphp
 
-<div {{ $attributes->merge(['class' => 'd-inline-block position-relative overflow-hidden', 'title' => $name . ($user && !empty($user->email) ? ' (' . $user->email . ')' : '')]) }}
-    style="width: {{ $size }}; height: {{ $size }}; flex-shrink: 0; border-radius: 50%;"
-    x-data="{ imgError: false }">
+<div {{ $attributes->merge(['class' => 'd-inline-flex position-relative align-items-center justify-content-center', 'title' => $name . ($user && !empty($user->email) ? ' (' . $user->email . ')' : '')]) }}
+    style="width: {{ $size }}; height: {{ $size }}; flex-shrink: 0; border-radius: 50%; overflow: hidden; background: {{ $bgColor }};">
 
-    @if ($user && $user->avatar)
-        <img src="{{ $user->avatar }}" alt="{{ $name }}"
-            class="rounded-circle w-100 h-100 object-fit-cover shadow-sm border border-2 border-white" x-show="!imgError"
-            x-on:error="imgError = true" style="display: block;">
+    {{-- Initials fallback — always underneath --}}
+    <span style="font-size: {{ $fontsize }}; font-weight: 700; color: #fff; letter-spacing: -0.02em; line-height: 1; user-select: none;">
+        {{ $initials }}
+    </span>
+
+    @if ($avatarUrl)
+        {{-- Image is absolutely positioned on top of initials.
+             On error it hides itself, revealing the initials beneath. --}}
+        <img src="{{ $avatarUrl }}"
+             alt="{{ $name }}"
+             class="rounded-circle"
+             style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
+             onerror="this.style.display='none'">
     @endif
 
-    <div x-show="imgError || !{{ $user && $user->avatar ? 'true' : 'false' }}" x-cloak
-        class="rounded-circle w-100 h-100 d-flex align-items-center justify-content-center fw-bold shadow-sm border border-2 border-white position-absolute top-0 start-0"
-        style="background: {{ $bgColor }}; color: #fff; font-size: {{ $fontsize }}; letter-spacing: -0.02em;">
-        {{ $initials }}
-    </div>
 </div>

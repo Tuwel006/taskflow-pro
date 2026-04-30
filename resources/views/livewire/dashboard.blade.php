@@ -1,299 +1,304 @@
-<div class="container-fluid py-4 bg-slate-50 min-vh-100">
-    {{-- Header: Professional & Clean --}}
-    <div class="row align-items-center mb-4">
-        <div class="col-md-8">
-            <h4 class="fw-bold text-slate-900 mb-1">Project Command Center</h4>
-            <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-indigo-100 text-indigo-700 border border-indigo-200 px-2 py-1" style="font-size: 0.65rem;">
-                    <i class="bi bi-diagram-3 me-1"></i> {{ $selectedProject->name ?? 'All Projects' }}
-                </span>
-                <span class="text-muted small">Real-time performance analytics and team synchronization</span>
-            </div>
-        </div>
-        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <div class="btn-group shadow-sm">
-                <button class="btn btn-white border btn-sm fw-semibold px-3">
-                    <i class="bi bi-cloud-download me-2"></i>Report
-                </button>
-                <a href="/tasks" wire:navigate class="btn btn-indigo btn-sm fw-semibold px-3">
-                    <i class="bi bi-kanban me-2"></i>Board
-                </a>
-            </div>
-        </div>
-    </div>
-
-    {{-- Metric Cards Grid: Top Row --}}
-    <div class="row g-3 mb-4">
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="icon-shape bg-indigo-50 text-indigo-600 rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                            <i class="bi bi-briefcase fs-6"></i>
-                        </div>
-                        <span class="text-slate-400 fw-bold x-small">TOTAL</span>
-                    </div>
-                    <h4 class="fw-bold text-slate-900 mb-1">{{ number_format($totalTasks) }}</h4>
-                    <div class="progress" style="height: 4px; border-radius: 10px; background: #f1f5f9;">
-                        <div class="progress-bar bg-indigo-500" style="width: 100%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="icon-shape bg-amber-50 text-amber-600 rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                            <i class="bi bi-lightning-charge fs-6"></i>
-                        </div>
-                        <span class="text-slate-400 fw-bold x-small">ACTIVE</span>
-                    </div>
-                    <h4 class="fw-bold text-slate-900 mb-1">{{ number_format($inProgressCount) }}</h4>
-                    <div class="progress" style="height: 4px; border-radius: 10px; background: #f1f5f9;">
-                        @php $progPct = $totalTasks > 0 ? ($inProgressCount / $totalTasks) * 100 : 0; @endphp
-                        <div class="progress-bar bg-amber-500" style="width: {{ $progPct }}%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="icon-shape bg-emerald-50 text-emerald-600 rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                            <i class="bi bi-check-circle fs-6"></i>
-                        </div>
-                        <span class="text-slate-400 fw-bold x-small">DONE</span>
-                    </div>
-                    <h4 class="fw-bold text-slate-900 mb-1">{{ number_format($completedCount) }}</h4>
-                    <div class="progress" style="height: 4px; border-radius: 10px; background: #f1f5f9;">
-                        @php $compPct = $totalTasks > 0 ? ($completedCount / $totalTasks) * 100 : 0; @endphp
-                        <div class="progress-bar bg-emerald-500" style="width: {{ $compPct }}%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px; background: #0f172a;">
-                <div class="card-body p-3">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <div class="icon-shape bg-white bg-opacity-10 text-white rounded-3 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-                            <i class="bi bi-exclamation-triangle fs-6"></i>
-                        </div>
-                        <span class="text-slate-400 fw-bold x-small">ALERT</span>
-                    </div>
-                    <h4 class="fw-bold text-white mb-1">{{ number_format($overdueTasks) }}</h4>
-                    <div class="progress" style="height: 4px; border-radius: 10px; background: rgba(255,255,255,0.1);">
-                        @php $overPct = $totalTasks > 0 ? ($overdueTasks / $totalTasks) * 100 : 0; @endphp
-                        <div class="progress-bar bg-rose-500" style="width: {{ $overPct }}%"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Main Row: Balanced Activity & Progress --}}
-    <div class="row g-4 mb-4">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-header bg-white py-3 border-bottom border-light">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="mb-0 fw-bold text-slate-800">Recent Stream Activity</h6>
-                        <span class="badge bg-slate-100 text-slate-600 fw-semibold x-small">LIVE LOG</span>
-                    </div>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="bg-slate-50 text-slate-500 x-small text-uppercase fw-bold">
-                                <tr>
-                                    <th class="px-4 py-3 border-0">Identifier & Title</th>
-                                    <th class="px-3 py-3 border-0">Assignee</th>
-                                    <th class="px-3 py-3 border-0">State</th>
-                                    <th class="px-4 py-3 border-0 text-end">Due</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($recentTasks as $task)
-                                    <tr wire:key="task-row-{{ $task->id }}">
-                                        <td class="px-4 py-3">
-                                            <div class="d-flex align-items-center gap-3">
-                                                <div class="text-indigo-600 fw-bold bg-indigo-50 px-2 py-1 rounded" style="font-size: 0.7rem; font-family: 'JetBrains Mono', monospace;">
-                                                    {{ $task->display_id }}
-                                                </div>
-                                                <div class="fw-semibold text-slate-800 text-truncate" style="font-size: 0.8125rem; max-width: 250px;">{{ $task->title }}</div>
-                                            </div>
-                                        </td>
-                                        <td class="px-3 py-3">
-                                            <x-user-avatar :user="$task->assignee" size="26px" />
-                                        </td>
-                                        <td class="px-3 py-3">
-                                            <span class="badge rounded-pill fw-bold" 
-                                                style="font-size: 0.55rem; background: {{ $task->statusRecord->color ?? '#64748b' }}12; color: {{ $task->statusRecord->color ?? '#64748b' }}; border: 1px solid {{ $task->statusRecord->color ?? '#64748b' }}25 !important;">
-                                                {{ strtoupper($task->statusRecord->name ?? 'N/A') }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-3 text-end">
-                                            <span class="text-slate-500 x-small">
-                                                {{ $task->due_date ? $task->due_date->format('d M') : '--' }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="4" class="text-center py-5 text-muted small">Initialization pending...</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100 bg-indigo-600 text-white" style="border-radius: 10px;">
-                <div class="card-body p-4 d-flex flex-column justify-content-between">
-                    <div>
-                        <h6 class="fw-bold mb-4 opacity-75">Workload Velocity</h6>
-                        <div class="d-flex align-items-baseline gap-2 mb-2">
-                            <h2 class="fw-bold mb-0" style="font-size: 2.5rem;">{{ $totalTasks > 0 ? round(($completedCount / $totalTasks) * 100) : 0 }}%</h2>
-                            <span class="x-small opacity-75 fw-bold">EFFICIENCY</span>
-                        </div>
-                        <div class="progress bg-white bg-opacity-20 mb-4" style="height: 8px; border-radius: 10px;">
-                            <div class="progress-bar bg-white shadow-sm" style="width: {{ $totalTasks > 0 ? ($completedCount / $totalTasks) * 100 : 0 }}%"></div>
-                        </div>
-                    </div>
-                    <div class="row g-2 text-center">
-                        <div class="col-6">
-                            <div class="bg-white bg-opacity-10 rounded-3 py-3 border border-white border-opacity-10">
-                                <div class="fw-bold fs-4">{{ $totalTasks }}</div>
-                                <div class="x-small opacity-50 fw-bold">CAPACITY</div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="bg-white bg-opacity-10 rounded-3 py-3 border border-white border-opacity-10">
-                                <div class="fw-bold fs-4">{{ $team->count() }}</div>
-                                <div class="x-small opacity-50 fw-bold">SQUAD</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- Bottom Row: Balanced Details --}}
-    <div class="row g-4">
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-header bg-white py-3 border-bottom border-light">
-                    <h6 class="mb-0 fw-bold text-slate-800">State Metrics</h6>
-                </div>
-                <div class="card-body py-4">
-                    @foreach([
-                        ['label' => 'BACKLOG / TODO', 'count' => $todoCount, 'color' => 'bg-slate-300'],
-                        ['label' => 'IN EXECUTION', 'count' => $inProgressCount, 'color' => 'bg-amber-400'],
-                        ['label' => 'DELIVERED', 'count' => $completedCount, 'color' => 'bg-emerald-500']
-                    ] as $stat)
-                        <div class="mb-3 last-child-mb-0">
-                            <div class="d-flex justify-content-between mb-1">
-                                <span class="x-small fw-bold text-slate-500">{{ $stat['label'] }}</span>
-                                <span class="x-small fw-bold text-slate-900">{{ $stat['count'] }}</span>
-                            </div>
-                            <div class="progress" style="height: 5px; border-radius: 10px; background: #f1f5f9;">
-                                @php $sPct = $totalTasks > 0 ? ($stat['count'] / $totalTasks) * 100 : 0; @endphp
-                                <div class="progress-bar {{ $stat['color'] }}" style="width: {{ $sPct }}%"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-header bg-white py-3 border-bottom border-light">
-                    <h6 class="mb-0 fw-bold text-slate-800">Project Stakeholders</h6>
-                </div>
-                <div class="card-body py-3">
-                    @foreach ($team->take(3) as $member)
-                        <div class="d-flex align-items-center justify-content-between mb-3 last-child-mb-0">
-                            <div class="d-flex align-items-center gap-3">
-                                <x-user-avatar :user="$member" size="30px" />
-                                <div>
-                                    <div class="fw-bold text-slate-900 small mb-0">{{ $member->name }}</div>
-                                    <div class="text-slate-400 x-small fw-semibold">{{ strtoupper($member->role) }}</div>
-                                </div>
-                            </div>
-                            <div class="pulse-indicator bg-emerald-500"></div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm h-100" style="border-radius: 10px;">
-                <div class="card-header bg-white py-3 border-bottom border-light">
-                    <h6 class="mb-0 fw-bold text-slate-800">Portfolio Overview</h6>
-                </div>
-                <div class="card-body p-0">
-                    @foreach ($projects as $project)
-                        <div class="px-4 py-2 border-bottom border-light transition">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span class="fw-bold text-slate-700 small text-truncate" style="max-width: 150px;">{{ $project->name }}</span>
-                                <span class="text-indigo-600 fw-bold" style="font-size: 0.65rem;">{{ $project->tasks_count }}T</span>
-                            </div>
-                            @php $pPct = $project->tasks_count > 0 ? ($project->completed_tasks_count / $project->tasks_count) * 100 : 0; @endphp
-                            <div class="progress" style="height: 3px; border-radius: 10px; background: #f1f5f9;">
-                                <div class="progress-bar bg-indigo-500" style="width: {{ $pPct }}%"></div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="container-fluid py-2">
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&display=swap');
-        
-        body { background-color: #f8fafc; color: #334155; }
-        .text-slate-900 { color: #0f172a; }
-        .text-slate-800 { color: #1e293b; }
-        .text-slate-700 { color: #334155; }
-        .text-slate-500 { color: #64748b; }
-        .text-slate-400 { color: #94a3b8; }
-        
-        .bg-indigo-500 { background-color: #6366f1; }
-        .bg-indigo-600 { background-color: #4f46e5; }
-        .bg-indigo-50 { background-color: #eef2ff; }
-        .text-indigo-600 { color: #4f46e5; }
-        .text-indigo-700 { color: #4338ca; }
-        .btn-indigo { background-color: #4f46e5; color: white; border: none; }
-        
-        .bg-amber-500 { background-color: #f59e0b; }
-        .bg-amber-400 { background-color: #fbbf24; }
-        .bg-amber-50 { background-color: #fffbeb; }
-        
-        .bg-emerald-500 { background-color: #10b981; }
-        .bg-emerald-50 { background-color: #ecfdf5; }
-        
-        .bg-rose-500 { background-color: #f43f5e; }
-
-        .x-small { font-size: 0.65rem; letter-spacing: 0.5px; }
-        .last-child-mb-0:last-child { margin-bottom: 0 !important; }
-        .btn-white { background: white; color: #475569; }
-        .transition { transition: all 0.2s ease; }
-        
-        .pulse-indicator {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
+        .dash-stat-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.25rem 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: box-shadow .2s;
         }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
-            70% { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        .dash-stat-card:hover {
+            box-shadow: 0 4px 16px rgba(15,23,42,.07);
+        }
+        .dash-stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        .dash-stat-label {
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: .05em;
+            color: #94a3b8;
+            margin-bottom: 2px;
+        }
+        .dash-stat-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0f172a;
+            line-height: 1;
+        }
+        .dash-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        .dash-card-header {
+            padding: .85rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+        }
+        .task-row {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+            padding: .65rem 1.25rem;
+            border-bottom: 1px solid #f8fafc;
+            font-size: 0.8rem;
+            transition: background .15s;
+        }
+        .task-row:last-child { border-bottom: none; }
+        .task-row:hover { background: #f8fafc; }
+        .task-title {
+            font-weight: 600;
+            color: #1e293b;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 220px;
+        }
+        .task-project {
+            font-size: 0.72rem;
+            color: #94a3b8;
+            white-space: nowrap;
+        }
+        .status-pill {
+            font-size: 0.68rem;
+            font-weight: 600;
+            padding: .2rem .55rem;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+        .project-row {
+            padding: .7rem 1.25rem;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .project-row:last-child { border-bottom: none; }
+        .progress-thin {
+            height: 5px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        .progress-thin-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0ea5e9, #0369a1);
+            border-radius: 10px;
+            transition: width .4s ease;
         }
     </style>
+
+    {{-- Page greeting --}}
+    <div class="mb-4">
+        <h1 style="font-size: 1.3rem; font-weight: 700; color: #0f172a; margin-bottom: 2px;">
+            👋 Welcome back, {{ auth()->user()->name }}
+        </h1>
+        <p class="text-muted mb-0" style="font-size: 0.8125rem;">
+            Here's a quick overview of what's happening in your workspace today.
+        </p>
+    </div>
+
+    {{-- ── Row 1: Summary Stats ── --}}
+    <div class="row g-3 mb-4">
+
+        {{-- Total Tasks --}}
+        <div class="col-6 col-md-3">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #eff6ff; color: #2563eb;">
+                    <i class="bi bi-list-task"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">Total Tasks</div>
+                    <div class="dash-stat-value">{{ $totalTasks }}</div>
+                </div>
+            </div>
+        </div>
+
+        {{-- In Progress --}}
+        <div class="col-6 col-md-3">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #fffbeb; color: #d97706;">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">In Progress</div>
+                    <div class="dash-stat-value">{{ $inProgressTasks }}</div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Completed --}}
+        <div class="col-6 col-md-3">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #f0fdf4; color: #16a34a;">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">Completed</div>
+                    <div class="dash-stat-value">{{ $completedTasks }}</div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Overdue --}}
+        <div class="col-6 col-md-3">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #fff1f2; color: #dc2626;">
+                    <i class="bi bi-exclamation-circle"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">Overdue</div>
+                    <div class="dash-stat-value" style="{{ $overdueTasks > 0 ? 'color:#dc2626;' : '' }}">
+                        {{ $overdueTasks }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── Row 2: People + Projects quick stats ── --}}
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #f0f9ff; color: #0369a1;">
+                    <i class="bi bi-folder2-open"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">Active Projects</div>
+                    <div class="dash-stat-value">{{ $totalProjects }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #faf5ff; color: #7c3aed;">
+                    <i class="bi bi-person-badge"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">Agents</div>
+                    <div class="dash-stat-value">{{ $totalAgents }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4">
+            <div class="dash-stat-card">
+                <div class="dash-stat-icon" style="background: #fff7ed; color: #c2410c;">
+                    <i class="bi bi-building"></i>
+                </div>
+                <div>
+                    <div class="dash-stat-label">Clients</div>
+                    <div class="dash-stat-value">{{ $totalClients }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ── Row 3: Recent Tasks + Projects ── --}}
+    <div class="row g-3">
+
+        {{-- Recent Tasks --}}
+        <div class="col-lg-7">
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <i class="bi bi-clock-history text-muted"></i>
+                    Latest Tasks
+                    <a href="/tasks" wire:navigate class="ms-auto text-muted" style="font-size:.75rem; font-weight:500; text-decoration:none;">
+                        View all <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                @forelse ($recentTasks as $task)
+                    <div class="task-row">
+                        {{-- Assignee avatar --}}
+                        <x-user-avatar :user="$task->assignee" size="26px" fontsize="0.6rem" />
+
+                        {{-- Title + project --}}
+                        <div style="flex:1; min-width:0;">
+                            <div class="task-title">{{ $task->title }}</div>
+                            <div class="task-project">
+                                <i class="bi bi-folder me-1"></i>{{ $task->project->name ?? '—' }}
+                            </div>
+                        </div>
+
+                        {{-- Status --}}
+                        @if ($task->statusRecord)
+                            <span class="status-pill"
+                                style="background: {{ $task->statusRecord->color ?? '#64748b' }}18; color: {{ $task->statusRecord->color ?? '#64748b' }}; border: 1px solid {{ $task->statusRecord->color ?? '#64748b' }}30;">
+                                {{ $task->statusRecord->name }}
+                            </span>
+                        @endif
+
+                        {{-- Due date --}}
+                        <span style="font-size:.72rem; color:#94a3b8; white-space:nowrap;">
+                            {{ $task->due_date ? $task->due_date->format('d M') : '—' }}
+                        </span>
+                    </div>
+                @empty
+                    <div class="text-center py-5 text-muted" style="font-size:.8rem;">
+                        <i class="bi bi-inbox display-6 d-block mb-2 opacity-25"></i>
+                        No tasks yet. <a href="/tasks" wire:navigate>Create one</a>.
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+        {{-- Projects overview --}}
+        <div class="col-lg-5">
+            <div class="dash-card">
+                <div class="dash-card-header">
+                    <i class="bi bi-folder2 text-muted"></i>
+                    Projects
+                    <a href="/projects" wire:navigate class="ms-auto text-muted" style="font-size:.75rem; font-weight:500; text-decoration:none;">
+                        View all <i class="bi bi-arrow-right"></i>
+                    </a>
+                </div>
+
+                @forelse ($projects as $project)
+                    @php
+                        $pct = $project->tasks_count > 0
+                            ? round(($project->completed_tasks_count / $project->tasks_count) * 100)
+                            : 0;
+                    @endphp
+                    <div class="project-row">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span style="font-size:.8125rem; font-weight:600; color:#1e293b;">
+                                {{ $project->name }}
+                            </span>
+                            <span style="font-size:.72rem; color:#94a3b8;">
+                                {{ $project->completed_tasks_count }}/{{ $project->tasks_count }} done
+                            </span>
+                        </div>
+                        <div class="progress-thin">
+                            <div class="progress-thin-bar" style="width: {{ $pct }}%;"></div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="text-center py-5 text-muted" style="font-size:.8rem;">
+                        <i class="bi bi-folder-x display-6 d-block mb-2 opacity-25"></i>
+                        No projects yet.
+                    </div>
+                @endforelse
+            </div>
+        </div>
+
+    </div>
+
 </div>

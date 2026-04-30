@@ -5,73 +5,45 @@ namespace App\Livewire;
 use App\Models\Task;
 use App\Models\Project;
 use App\Models\User;
+use App\UserType;
 use Livewire\Component;
 
 class Dashboard extends Component
 {
-    public $selectedProjectId;
-
-    public function mount()
-    {
-        $this->selectedProjectId = session('selected_project_id');
-    }
-
     public function render()
     {
-        // If no project selected, use first one or show empty
-        if (!$this->selectedProjectId) {
-            $this->selectedProjectId = Project::first()->id ?? null;
-        }
+        // Overall task counts
+        $totalTasks     = Task::count();
+        $pendingTasks   = Task::whereHas('statusRecord', fn($q) => $q->where('name', 'To Do'))->count();
+        $inProgressTasks = Task::whereHas('statusRecord', fn($q) => $q->where('name', 'In Progress'))->count();
+        $completedTasks = Task::completed()->count();
+        $overdueTasks   = Task::where('due_date', '<', now()->format('Y-m-d'))
+                              ->notCompleted()
+                              ->count();
 
-        $selectedProject = Project::find($this->selectedProjectId);
+        // People
+        $totalAgents  = User::where('type', UserType::Agent)->count();
+        $totalClients = User::where('type', UserType::Client)->count();
 
-        // Stats for selected project using new dynamic completion logic
-        $tasks = Task::where('project_id', $this->selectedProjectId);
-        $totalTasks = (clone $tasks)->count();
-        
-        $completedCount = (clone $tasks)->completed()->count();
+        // Projects
+        $totalProjects = Project::count();
 
-        // We'll keep In Progress and To Do based on status name for now as they are less project-dependent
-        // but could also be mapped to stage positions if needed.
-        $inProgressCount = (clone $tasks)->whereHas('statusRecord', function($q) {
-            $q->where('name', 'In Progress');
-        })->count();
-
-        $todoCount = (clone $tasks)->whereHas('statusRecord', function($q) {
-            $q->where('name', 'To Do');
-        })->count();
-
-        // Project Health (Overdue): Use notCompleted scope
-        $overdueTasks = (clone $tasks)
-            ->where('due_date', '<', now()->format('Y-m-d'))
-            ->notCompleted()
-            ->count();
-
-        // Team distribution
-        $team = User::whereHas('projects', function($q) {
-            $q->where('project_id', $this->selectedProjectId);
-        })->limit(5)->get();
-
-        // Project List Summary with dynamic completion count
-        $projects = Project::withCount(['tasks', 'tasks as completed_tasks_count' => function($q) {
-            $q->completed();
-        }])->limit(3)->get();
-
-        $recentTasks = (clone $tasks)->with(['statusRecord', 'assignee'])
+        // Recent tasks with status + assignee
+        $recentTasks = Task::with(['statusRecord', 'assignee', 'project'])
             ->latest()
-            ->limit(6)
+            ->limit(8)
             ->get();
 
-        return view('livewire.dashboard', [
-            'selectedProject' => $selectedProject,
-            'totalTasks' => $totalTasks,
-            'inProgressCount' => $inProgressCount,
-            'completedCount' => $completedCount,
-            'todoCount' => $todoCount,
-            'overdueTasks' => $overdueTasks,
-            'team' => $team,
-            'projects' => $projects,
-            'recentTasks' => $recentTasks,
-        ]);
+        // Projects list
+        $projects = Project::withCount(['tasks', 'tasks as completed_tasks_count' => fn($q) => $q->completed()])
+            ->latest()
+            ->limit(5)
+            ->get();
+
+        return view('livewire.dashboard', compact(
+            'totalTasks', 'pendingTasks', 'inProgressTasks', 'completedTasks',
+            'overdueTasks', 'totalAgents', 'totalClients', 'totalProjects',
+            'recentTasks', 'projects'
+        ));
     }
 }
